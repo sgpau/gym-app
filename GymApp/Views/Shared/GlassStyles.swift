@@ -18,11 +18,6 @@ extension View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(.background.secondary, in: .rect(cornerRadius: cornerRadius))
     }
-
-    /// La barra de navegación se minimiza al hacer scroll hacia abajo (iOS 27).
-    func minimizesNavigationBarOnScroll() -> some View {
-        toolbarMinimizeBehavior(.onScrollDown, for: .navigationBar)
-    }
 }
 
 extension ToolbarItemPlacement {

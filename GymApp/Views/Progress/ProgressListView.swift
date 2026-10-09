@@ -50,7 +50,6 @@ struct ProgressListView: View {
                 }
             }
             .navigationTitle("Progreso")
-            .minimizesNavigationBarOnScroll()
             .navigationDestination(for: Exercise.self) { ExerciseProgressView(exercise: $0) }
         }
     }

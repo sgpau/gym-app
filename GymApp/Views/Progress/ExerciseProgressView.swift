@@ -61,7 +61,6 @@ struct ExerciseProgressView: View {
             .padding()
         }
         .navigationTitle(exercise.name)
-        .minimizesNavigationBarOnScroll()
         .sensoryFeedback(.selection, trigger: range)
     }
 

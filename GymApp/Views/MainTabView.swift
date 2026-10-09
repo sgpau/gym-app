@@ -28,6 +28,7 @@ struct MainTabView: View {
                 TrainView()
             }
         }
+        .tabBarMinimizeBehavior(.onScrollDown)
         .task {
             guard !didSeed else { return }
             SeedData.insertIfEmpty(into: context)

@@ -45,7 +45,6 @@ struct ExerciseListView: View {
                 }
             }
             .navigationTitle("Ejercicios")
-            .minimizesNavigationBarOnScroll()
             .toolbar {
                 ToolbarItem(placement: .pinnedPrimary) {
                     Button("Nuevo ejercicio", systemImage: "plus") { editing = .new }
