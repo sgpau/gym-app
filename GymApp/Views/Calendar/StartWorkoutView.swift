@@ -95,30 +95,9 @@ private struct RoutineRowLabel: View {
     }
 }
 
-/// La pestaña destacada «Entrenar»: empezar el entreno de hoy en un toque.
-struct TrainView: View {
-    @Environment(\.modelContext) private var context
-    @Query(filter: #Predicate<Workout> { $0.isFinished == false }, sort: \Workout.date, order: .reverse)
-    private var unfinished: [Workout]
-    @State private var flow: WorkoutFlow? = nil
-
-    var body: some View {
-        NavigationStack {
-            StartWorkoutView(
-                day: .now,
-                title: "Entrenar",
-                inProgress: unfinished.first,
-                onResume: { flow = .edit($0, isNew: false) }
-            ) { routine in
-                let workout = WorkoutFactory.makeWorkout(routine: routine, day: .now, in: context)
-                flow = .edit(workout, isNew: true)
-            }
-        }
-        .fullScreenCover(item: $flow) { WorkoutFlowView(flow: $0) }
-    }
-}
-
 #Preview {
-    TrainView()
-        .modelContainer(PreviewData.container)
+    NavigationStack {
+        StartWorkoutView(day: .now, onCancel: {}) { _ in }
+    }
+    .modelContainer(PreviewData.container)
 }

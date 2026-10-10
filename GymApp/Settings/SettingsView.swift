@@ -3,7 +3,9 @@ import SwiftUI
 struct SettingsView: View {
     @AppStorage(AppAppearance.storageKey) private var appearance: AppAppearance = .system
     @AppStorage(AccentChoice.storageKey) private var accent: AccentChoice = .blue
+    @AppStorage("developerMode") private var developerMode = false
     @Environment(\.dismiss) private var dismiss
+    @State private var versionTaps = 0
 
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 12), count: 5)
 
@@ -31,6 +33,21 @@ struct SettingsView: View {
                 } footer: {
                     Text("Se usa en botones, pestañas, el calendario y las gráficas.")
                 }
+
+                Section {
+                    HStack {
+                        Text("Versión")
+                        Spacer()
+                        Text(appVersion)
+                            .foregroundStyle(.secondary)
+                    }
+                    .contentShape(.rect)
+                    .onTapGesture(perform: tapVersion)
+                }
+
+                if developerMode {
+                    DeveloperSection { developerMode = false }
+                }
             }
             .navigationTitle("Ajustes")
             .navigationBarTitleDisplayMode(.inline)
@@ -41,6 +58,23 @@ struct SettingsView: View {
             }
             .sensoryFeedback(.selection, trigger: accent)
             .sensoryFeedback(.selection, trigger: appearance)
+            .sensoryFeedback(.success, trigger: developerMode) { _, isOn in isOn }
+        }
+    }
+
+    private var appVersion: String {
+        let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.0"
+        let build = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "1"
+        return "\(version) (\(build))"
+    }
+
+    /// Menú oculto: 7 toques seguidos en «Versión».
+    private func tapVersion() {
+        guard !developerMode else { return }
+        versionTaps += 1
+        if versionTaps >= 7 {
+            withAnimation { developerMode = true }
+            versionTaps = 0
         }
     }
 }

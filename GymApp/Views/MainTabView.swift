@@ -2,7 +2,7 @@ import SwiftData
 import SwiftUI
 
 enum AppTab: Hashable {
-    case calendar, routines, exercises, progress, train
+    case calendar, routines, exercises, progress
 }
 
 struct MainTabView: View {
@@ -23,9 +23,6 @@ struct MainTabView: View {
             }
             Tab("Progreso", systemImage: "chart.line.uptrend.xyaxis", value: AppTab.progress) {
                 ProgressListView()
-            }
-            Tab("Entrenar", systemImage: "figure.strengthtraining.traditional", value: AppTab.train, role: .featured) {
-                TrainView()
             }
         }
         .tabBarMinimizeBehavior(.onScrollDown)

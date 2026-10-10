@@ -24,8 +24,3 @@ extension ToolbarItemPlacement {
     /// Acción principal fijada al borde derecho: nunca se oculta en el menú de desbordamiento (iOS 27).
     static var pinnedPrimary: ToolbarItemPlacement { .topBarPinnedTrailing }
 }
-
-extension TabRole {
-    /// Pestaña destacada al borde derecho de la barra (iOS 27).
-    static var featured: TabRole { .prominent }
-}
