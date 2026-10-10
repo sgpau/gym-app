@@ -92,7 +92,7 @@ private struct WorkoutCard: View {
     }
 
     private func subtitle(_ summary: SessionSummary) -> String {
-        var parts = ["\(workout.logs.count) ejercicios", "\(summary.setCount) series"]
+        var parts = [String(localized: "\(workout.logs.count) ejercicios"), String(localized: "\(summary.setCount) series")]
         if summary.volume > 0 { parts.append(Format.weight(summary.volume)) }
         if summary.totalDuration > 0 { parts.append(Format.duration(summary.totalDuration)) }
         return parts.joined(separator: " · ")

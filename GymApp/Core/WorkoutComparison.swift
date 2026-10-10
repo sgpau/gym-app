@@ -36,10 +36,10 @@ nonisolated enum RecordKind: String, Hashable, CaseIterable {
 
     var title: String {
         switch self {
-        case .maxWeight: "Récord de peso"
-        case .oneRepMax: "Récord de 1RM"
-        case .maxReps: "Récord de repeticiones"
-        case .maxDuration: "Récord de tiempo"
+        case .maxWeight: String(localized: "Récord de peso")
+        case .oneRepMax: String(localized: "Récord de 1RM")
+        case .maxReps: String(localized: "Récord de repeticiones")
+        case .maxDuration: String(localized: "Récord de tiempo")
         }
     }
 }

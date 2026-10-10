@@ -137,7 +137,7 @@ private struct DayCell: View {
         .buttonStyle(.plain)
         .animation(.snappy(duration: 0.2), value: isSelected)
         .accessibilityLabel(day.dayTitle)
-        .accessibilityValue(hasWorkout ? "Con entreno" : "")
+        .accessibilityValue(hasWorkout ? String(localized: "Con entreno") : "")
         .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 }

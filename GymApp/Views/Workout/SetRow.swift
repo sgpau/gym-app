@@ -38,7 +38,7 @@ struct SetRow: View {
 
 /// Campo numérico compacto con su unidad detrás.
 private struct NumberField<Field: View>: View {
-    let unit: String
+    let unit: LocalizedStringKey
     @ViewBuilder var field: Field
 
     var body: some View {
@@ -62,6 +62,10 @@ struct DurationField: View {
     @Binding var duration: TimeInterval?
     @State private var showPicker = false
     @State private var stopwatchStart: Date? = nil
+
+    private var durationDescription: String {
+        duration.map { Format.duration($0) } ?? String(localized: "sin anotar")
+    }
 
     var body: some View {
         HStack(spacing: 8) {
@@ -88,7 +92,7 @@ struct DurationField: View {
                         .monospacedDigit()
                 }
                 .buttonStyle(.bordered)
-                .accessibilityLabel("Duración \(duration.map { Format.duration($0) } ?? "sin anotar")")
+                .accessibilityLabel("Duración \(durationDescription)")
 
                 Button("Iniciar cronómetro", systemImage: "play.fill") {
                     stopwatchStart = .now

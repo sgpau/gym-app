@@ -19,7 +19,7 @@ final class Workout {
     var sortedEntries: [WorkoutExercise] { entries.sorted { $0.order < $1.order } }
 
     var title: String {
-        guard let name = routine?.name, !name.isEmpty else { return "Entrenamiento libre" }
+        guard let name = routine?.name, !name.isEmpty else { return String(localized: "Entrenamiento libre") }
         return name
     }
 }

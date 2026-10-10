@@ -8,8 +8,7 @@ struct ImportResult {
     var setsImported = 0
 
     var summary: String {
-        "\(workoutsImported) entrenos y \(setsImported) series importados. "
-            + "Nuevos: \(exercisesCreated) ejercicios, \(routinesCreated) rutinas."
+        String(localized: "\(workoutsImported) entrenos y \(setsImported) series importados. Nuevos: \(exercisesCreated) ejercicios, \(routinesCreated) rutinas.")
     }
 }
 
@@ -41,9 +40,10 @@ enum DataImporter {
         }
         let exerciseInfo = Dictionary(backup.exercises.map { (key($0.name), $0) }, uniquingKeysWith: { first, _ in first })
 
-        func exercise(named name: String, inferredType: TrackingType) -> Exercise {
+        func exercise(named rawName: String, inferredType: TrackingType) -> Exercise {
+            let name = SeedData.localizedName(rawName)
             if let existing = exercises[key(name)] { return existing }
-            let info = exerciseInfo[key(name)]
+            let info = exerciseInfo[key(rawName)]
             let created = Exercise(
                 name: name,
                 muscleGroup: info?.muscleGroup.flatMap(MuscleGroup.init(rawValue:)) ?? .other,
@@ -63,8 +63,8 @@ enum DataImporter {
         for routine in try context.fetch(FetchDescriptor<Routine>()) {
             routines[key(routine.name)] = routine
         }
-        for info in backup.routines where routines[key(info.name)] == nil {
-            let routine = Routine(name: info.name)
+        for info in backup.routines where routines[key(SeedData.localizedName(info.name))] == nil {
+            let routine = Routine(name: SeedData.localizedName(info.name))
             context.insert(routine)
             for (order, itemInfo) in info.items.enumerated() {
                 let item = RoutineItem(order: order)
@@ -75,16 +75,16 @@ enum DataImporter {
                 item.targetDuration = itemInfo.duration ?? item.targetDuration
                 item.routine = routine
             }
-            routines[key(info.name)] = routine
+            routines[key(routine.name)] = routine
             result.routinesCreated += 1
         }
 
         for info in backup.workouts {
             let workout = Workout(date: info.date)
             context.insert(workout)
-            workout.notes = info.notes ?? ""
+            workout.notes = info.notes.map(SeedData.localizedName) ?? ""
             workout.isFinished = true
-            workout.routine = info.routine.flatMap { routines[key($0)] }
+            workout.routine = info.routine.flatMap { routines[key(SeedData.localizedName($0))] }
 
             for (order, entryInfo) in info.exercises.enumerated() {
                 let isTimed = entryInfo.sets.contains { $0.duration != nil }

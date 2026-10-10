@@ -1,0 +1,2543 @@
+{
+  "sourceLanguage": "es",
+  "strings": {
+    "%@ por serie": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ per sèrie"
+          }
+        }
+      }
+    },
+    "%@ · %@": {
+      "shouldTranslate": false
+    },
+    "%@ · Última vez: %@": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · Última vegada: %@"
+          }
+        }
+      }
+    },
+    "%@: %@": {
+      "shouldTranslate": false
+    },
+    "%lld": {
+      "shouldTranslate": false
+    },
+    "%lld ejercicios": {
+      "localizations": {
+        "es": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld ejercicio"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld ejercicios"
+                }
+              }
+            }
+          }
+        },
+        "ca": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld exercici"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld exercicis"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld entrenos guardados. El archivo debe ser un JSON con el formato descrito en el README.": {
+      "localizations": {
+        "es": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld entreno guardado. El archivo debe ser un JSON con el formato descrito en el README."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld entrenos guardados. El archivo debe ser un JSON con el formato descrito en el README."
+                }
+              }
+            }
+          }
+        },
+        "ca": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld entrenament desat. El fitxer ha de ser un JSON amb el format descrit al README."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld entrenaments desats. El fitxer ha de ser un JSON amb el format descrit al README."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld entrenos y %lld series importados. Nuevos: %lld ejercicios, %lld rutinas.": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld entrenaments i %lld sèries importats. Nous: %lld exercicis, %lld rutines."
+          }
+        }
+      }
+    },
+    "%lld min": {
+      "shouldTranslate": false
+    },
+    "%lld repeticiones": {
+      "localizations": {
+        "es": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld repetición"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld repeticiones"
+                }
+              }
+            }
+          }
+        },
+        "ca": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld repetició"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld repeticions"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld reps": {
+      "localizations": {
+        "es": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld rep"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld reps"
+                }
+              }
+            }
+          }
+        },
+        "ca": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld rep"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld reps"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld s": {
+      "shouldTranslate": false
+    },
+    "%lld series": {
+      "localizations": {
+        "es": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld serie"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld series"
+                }
+              }
+            }
+          }
+        },
+        "ca": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld sèrie"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld sèries"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld sesiones": {
+      "localizations": {
+        "es": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld sesión"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld sesiones"
+                }
+              }
+            }
+          }
+        },
+        "ca": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld sessió"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld sessions"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "0": {
+      "shouldTranslate": false
+    },
+    "1A": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1A"
+          }
+        }
+      }
+    },
+    "1RM est.": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1RM est."
+          }
+        }
+      }
+    },
+    "1RM estimado": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1RM estimat"
+          }
+        }
+      }
+    },
+    "3M": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "3M"
+          }
+        }
+      }
+    },
+    "6M": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "6M"
+          }
+        }
+      }
+    },
+    "Ajustes": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Configuració"
+          }
+        }
+      }
+    },
+    "Anterior": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anterior"
+          }
+        }
+      }
+    },
+    "Apariencia": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aparença"
+          }
+        }
+      }
+    },
+    "Aperturas con mancuernas": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Obertures amb manuelles"
+          }
+        }
+      }
+    },
+    "Archivo no válido": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fitxer no vàlid"
+          }
+        }
+      }
+    },
+    "Azul": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blau"
+          }
+        }
+      }
+    },
+    "Añade los ejercicios sobre la marcha": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afegeix els exercicis sobre la marxa"
+          }
+        }
+      }
+    },
+    "Añade tu primer ejercicio con +.": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afegeix el teu primer exercici amb +."
+          }
+        }
+      }
+    },
+    "Añadir": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afegir"
+          }
+        }
+      }
+    },
+    "Añadir (%lld)": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afegir (%lld)"
+          }
+        }
+      }
+    },
+    "Añadir a los existentes": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afegir als existents"
+          }
+        }
+      }
+    },
+    "Añadir ejercicio": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afegir exercici"
+          }
+        }
+      }
+    },
+    "Añadir ejercicios": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afegir exercicis"
+          }
+        }
+      }
+    },
+    "Añadir serie": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afegir sèrie"
+          }
+        }
+      }
+    },
+    "Aún no hay progreso": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Encara no hi ha progrés"
+          }
+        }
+      }
+    },
+    "Aún no tienes rutinas": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Encara no tens rutines"
+          }
+        }
+      }
+    },
+    "Baja %@": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Baixa %@"
+          }
+        }
+      }
+    },
+    "Bicicleta estática": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bicicleta estàtica"
+          }
+        }
+      }
+    },
+    "Borrar": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esborrar"
+          }
+        }
+      }
+    },
+    "Borrar entrenos y rutinas": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esborrar entrenaments i rutines"
+          }
+        }
+      }
+    },
+    "Buscar ejercicio": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cercar exercici"
+          }
+        }
+      }
+    },
+    "Bíceps": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bíceps"
+          }
+        }
+      }
+    },
+    "Cada ejercicio se compara con la última vez que lo hiciste.": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cada exercici es compara amb l’última vegada que el vas fer."
+          }
+        }
+      }
+    },
+    "Calendario": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Calendari"
+          }
+        }
+      }
+    },
+    "Cambiar el tipo no convierte las series ya registradas.": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Canviar el tipus no converteix les sèries ja registrades."
+          }
+        }
+      }
+    },
+    "Cancelar": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel·lar"
+          }
+        }
+      }
+    },
+    "Cardio": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cardio"
+          }
+        }
+      }
+    },
+    "Cardio y core": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cardio i core"
+          }
+        }
+      }
+    },
+    "Cargar datos de prueba (último año)": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Carregar dades de prova (últim any)"
+          }
+        }
+      }
+    },
+    "Cerrar": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tancar"
+          }
+        }
+      }
+    },
+    "Cinta de correr": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cinta de córrer"
+          }
+        }
+      }
+    },
+    "Claro": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clar"
+          }
+        }
+      }
+    },
+    "Color principal": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Color principal"
+          }
+        }
+      }
+    },
+    "Comparado con tu entreno del %@": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comparat amb el teu entrenament del %@"
+          }
+        }
+      }
+    },
+    "Con entreno": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amb entrenament"
+          }
+        }
+      }
+    },
+    "Core": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Core"
+          }
+        }
+      }
+    },
+    "Crea una rutina con los ejercicios que sueles hacer juntos.": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crea una rutina amb els exercicis que acostumes a fer junts."
+          }
+        }
+      }
+    },
+    "Crear rutina": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crear rutina"
+          }
+        }
+      }
+    },
+    "Crunch abdominal": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crunch abdominal"
+          }
+        }
+      }
+    },
+    "Créalas en la pestaña Rutinas, o empieza un entrenamiento libre.": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crea-les a la pestanya Rutines, o comença un entrenament lliure."
+          }
+        }
+      }
+    },
+    "Cuando finalices entrenos, aquí verás la evolución de cada ejercicio.": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quan finalitzis entrenaments, aquí veuràs l’evolució de cada exercici."
+          }
+        }
+      }
+    },
+    "Curl con barra": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Curl amb barra"
+          }
+        }
+      }
+    },
+    "Curl femoral": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Curl femoral"
+          }
+        }
+      }
+    },
+    "Curl martillo": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Curl martell"
+          }
+        }
+      }
+    },
+    "Desarrollo": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desenvolupament"
+          }
+        }
+      }
+    },
+    "Descartar": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Descartar"
+          }
+        }
+      }
+    },
+    "Dominadas": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dominades"
+          }
+        }
+      }
+    },
+    "Duración": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Durada"
+          }
+        }
+      }
+    },
+    "Duración %@": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Durada %@"
+          }
+        }
+      }
+    },
+    "Duración máx.": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Durada màx."
+          }
+        }
+      }
+    },
+    "Editar ejercicio": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Editar exercici"
+          }
+        }
+      }
+    },
+    "Ej. Torso, Pierna, Empuje…": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "P. ex. Tors, Cama, Empenta…"
+          }
+        }
+      }
+    },
+    "Ejercicio": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exercici"
+          }
+        }
+      }
+    },
+    "Ejercicios": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exercicis"
+          }
+        }
+      }
+    },
+    "El archivo trae %lld entrenos. ¿Quieres reemplazar los actuales o añadirlos?": {
+      "localizations": {
+        "es": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "El archivo trae %lld entreno. ¿Quieres reemplazar los actuales o añadirlo?"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "El archivo trae %lld entrenos. ¿Quieres reemplazar los actuales o añadirlos?"
+                }
+              }
+            }
+          }
+        },
+        "ca": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "El fitxer porta %lld entrenament. Vols substituir els actuals o afegir-lo?"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "El fitxer porta %lld entrenaments. Vols substituir els actuals o afegir-los?"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Elevaciones laterales": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elevacions laterals"
+          }
+        }
+      }
+    },
+    "Elevación de gemelos": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elevació de bessons"
+          }
+        }
+      }
+    },
+    "Elevación de piernas colgado": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elevació de cames penjat"
+          }
+        }
+      }
+    },
+    "Eliminar": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eliminar"
+          }
+        }
+      }
+    },
+    "Eliminar ejercicio e historial": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eliminar l’exercici i l’historial"
+          }
+        }
+      }
+    },
+    "Empezado %@": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Començat %@"
+          }
+        }
+      }
+    },
+    "Empuje": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Empenta"
+          }
+        }
+      }
+    },
+    "En cada serie anotarás la duración, con cronómetro, y un peso opcional (lastre, disco…).": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A cada sèrie anotaràs la durada, amb cronòmetre, i un pes opcional (llast, disc…)."
+          }
+        }
+      }
+    },
+    "En cada serie anotarás repeticiones y peso.": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A cada sèrie anotaràs repeticions i pes."
+          }
+        }
+      }
+    },
+    "En curso": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En curs"
+          }
+        }
+      }
+    },
+    "Entrenamiento libre": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entrenament lliure"
+          }
+        }
+      }
+    },
+    "Entreno": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entrenament"
+          }
+        }
+      }
+    },
+    "Entrenos con este ejercicio: %lld. Rutinas: %lld. Se borrará también su historial y no se puede deshacer.": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entrenaments amb aquest exercici: %lld. Rutines: %lld. També s’esborrarà el seu historial i no es pot desfer."
+          }
+        }
+      }
+    },
+    "Entrenos y rutinas borrados.": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "S’han esborrat els entrenaments i les rutines."
+          }
+        }
+      }
+    },
+    "Error": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Error"
+          }
+        }
+      }
+    },
+    "Espalda": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esquena"
+          }
+        }
+      }
+    },
+    "Evolución de %@": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Evolució de %@"
+          }
+        }
+      }
+    },
+    "Extensión de cuádriceps": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Extensió de quàdriceps"
+          }
+        }
+      }
+    },
+    "Extensión de tríceps en polea": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Extensió de tríceps a la politja"
+          }
+        }
+      }
+    },
+    "Face pull": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Face pull"
+          }
+        }
+      }
+    },
+    "Fecha": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Data"
+          }
+        }
+      }
+    },
+    "Finalizar": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finalitzar"
+          }
+        }
+      }
+    },
+    "Flexiones": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Flexions"
+          }
+        }
+      }
+    },
+    "Fondos en paralelas": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fons a paral·leles"
+          }
+        }
+      }
+    },
+    "Glúteos": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Glutis"
+          }
+        }
+      }
+    },
+    "Grupo muscular": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grup muscular"
+          }
+        }
+      }
+    },
+    "Guardar": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desar"
+          }
+        }
+      }
+    },
+    "Hip thrust": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hip thrust"
+          }
+        }
+      }
+    },
+    "Historial": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Historial"
+          }
+        }
+      }
+    },
+    "Hombros": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Espatlles"
+          }
+        }
+      }
+    },
+    "Hoy": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avui"
+          }
+        }
+      }
+    },
+    "Hoy: %@": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Avui: %@"
+          }
+        }
+      }
+    },
+    "Idioma": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Idioma"
+          }
+        }
+      }
+    },
+    "Igual": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Igual"
+          }
+        }
+      }
+    },
+    "Igual que la vez anterior": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Igual que l’última vegada"
+          }
+        }
+      }
+    },
+    "Importar datos desde archivo…": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Importar dades des d’un fitxer…"
+          }
+        }
+      }
+    },
+    "Iniciar cronómetro": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Iniciar el cronòmetre"
+          }
+        }
+      }
+    },
+    "Jalón al pecho": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jaló al pit"
+          }
+        }
+      }
+    },
+    "La app está en castellano y catalán, y usa el idioma de tu iPhone. Para cambiarlo solo en esta app, pulsa aquí y elige Idioma.": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L’app està en castellà i català, i fa servir l’idioma del teu iPhone. Per canviar-lo només en aquesta app, toca aquí i tria Idioma."
+          }
+        }
+      }
+    },
+    "Listo": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fet"
+          }
+        }
+      }
+    },
+    "Los ejercicios se conservan. No se puede deshacer.": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Els exercicis es conserven. No es pot desfer."
+          }
+        }
+      }
+    },
+    "Los entrenos que ya hiciste con ella se conservan.": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Els entrenaments que ja hi vas fer es conserven."
+          }
+        }
+      }
+    },
+    "Mejor peso": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Millor pes"
+          }
+        }
+      }
+    },
+    "Mejor tiempo": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Millor temps"
+          }
+        }
+      }
+    },
+    "Menta": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Menta"
+          }
+        }
+      }
+    },
+    "Mes anterior": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mes anterior"
+          }
+        }
+      }
+    },
+    "Mes siguiente": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mes següent"
+          }
+        }
+      }
+    },
+    "Minutos": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Minuts"
+          }
+        }
+      }
+    },
+    "Morado": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lila"
+          }
+        }
+      }
+    },
+    "Más reps en una serie": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Més reps en una sèrie"
+          }
+        }
+      }
+    },
+    "Más volumen": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Més volum"
+          }
+        }
+      }
+    },
+    "Métrica": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mètrica"
+          }
+        }
+      }
+    },
+    "Naranja": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Taronja"
+          }
+        }
+      }
+    },
+    "No se pudo abrir el archivo": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No s’ha pogut obrir el fitxer"
+          }
+        }
+      }
+    },
+    "Nombre": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nom"
+          }
+        }
+      }
+    },
+    "Nombre del ejercicio": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nom de l’exercici"
+          }
+        }
+      }
+    },
+    "Notas": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notes"
+          }
+        }
+      }
+    },
+    "Nueva rutina": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nova rutina"
+          }
+        }
+      }
+    },
+    "Nuevo": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nou"
+          }
+        }
+      }
+    },
+    "Nuevo ejercicio": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nou exercici"
+          }
+        }
+      }
+    },
+    "Nuevo entreno": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nou entrenament"
+          }
+        }
+      }
+    },
+    "OK": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "D’acord"
+          }
+        }
+      }
+    },
+    "Ocultar herramientas de desarrollo": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amagar les eines de desenvolupament"
+          }
+        }
+      }
+    },
+    "Opciones de %@": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opcions de %@"
+          }
+        }
+      }
+    },
+    "Oscuro": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fosc"
+          }
+        }
+      }
+    },
+    "Otros": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Altres"
+          }
+        }
+      }
+    },
+    "Parar cronómetro": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aturar el cronòmetre"
+          }
+        }
+      }
+    },
+    "Pecho": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pit"
+          }
+        }
+      }
+    },
+    "Periodo": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Període"
+          }
+        }
+      }
+    },
+    "Peso muerto": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pes mort"
+          }
+        }
+      }
+    },
+    "Peso muerto rumano": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pes mort romanès"
+          }
+        }
+      }
+    },
+    "Peso máx.": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pes màx."
+          }
+        }
+      }
+    },
+    "Pierna": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cama"
+          }
+        }
+      }
+    },
+    "Piernas": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cames"
+          }
+        }
+      }
+    },
+    "Plancha": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Planxa"
+          }
+        }
+      }
+    },
+    "Plancha lateral": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Planxa lateral"
+          }
+        }
+      }
+    },
+    "Prensa de piernas": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Premsa de cames"
+          }
+        }
+      }
+    },
+    "Press de banca": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Press de banca"
+          }
+        }
+      }
+    },
+    "Press francés": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Press francès"
+          }
+        }
+      }
+    },
+    "Press inclinado con mancuernas": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Press inclinat amb manuelles"
+          }
+        }
+      }
+    },
+    "Press militar": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Press militar"
+          }
+        }
+      }
+    },
+    "Primera vez": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Primera vegada"
+          }
+        }
+      }
+    },
+    "Primera vez con esta rutina: cada ejercicio se compara con la última vez que lo hiciste.": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Primera vegada amb aquesta rutina: cada exercici es compara amb l’última vegada que el vas fer."
+          }
+        }
+      }
+    },
+    "Progreso": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Progrés"
+          }
+        }
+      }
+    },
+    "Pulsa Editar para cambiar el orden.": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toca Edita per canviar l’ordre."
+          }
+        }
+      }
+    },
+    "Quitar": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Treure"
+          }
+        }
+      }
+    },
+    "Quitar ejercicio": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Treure l’exercici"
+          }
+        }
+      }
+    },
+    "Reemplazar mis datos": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Substituir les meves dades"
+          }
+        }
+      }
+    },
+    "Registrar entrenamiento": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registrar entrenament"
+          }
+        }
+      }
+    },
+    "Remo con barra": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rem amb barra"
+          }
+        }
+      }
+    },
+    "Remo en polea baja": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rem a la politja baixa"
+          }
+        }
+      }
+    },
+    "Remo ergómetro": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rem ergòmetre"
+          }
+        }
+      }
+    },
+    "Repeticiones": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Repeticions"
+          }
+        }
+      }
+    },
+    "Reps": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reps"
+          }
+        }
+      }
+    },
+    "Resumen": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resum"
+          }
+        }
+      }
+    },
+    "Rojo": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vermell"
+          }
+        }
+      }
+    },
+    "Rosa": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rosa"
+          }
+        }
+      }
+    },
+    "Rutina sin nombre": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rutina sense nom"
+          }
+        }
+      }
+    },
+    "Rutinas": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rutines"
+          }
+        }
+      }
+    },
+    "Récord": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rècord"
+          }
+        }
+      }
+    },
+    "Récord de 1RM": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rècord de 1RM"
+          }
+        }
+      }
+    },
+    "Récord de peso": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rècord de pes"
+          }
+        }
+      }
+    },
+    "Récord de repeticiones": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rècord de repeticions"
+          }
+        }
+      }
+    },
+    "Récord de tiempo": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rècord de temps"
+          }
+        }
+      }
+    },
+    "Récords personales": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rècords personals"
+          }
+        }
+      }
+    },
+    "Saltar a la comba": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saltar a corda"
+          }
+        }
+      }
+    },
+    "Se borrarán todas sus series. No se puede deshacer.": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "S’esborraran totes les sèries. No es pot desfer."
+          }
+        }
+      }
+    },
+    "Se mide por": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Es mesura per"
+          }
+        }
+      }
+    },
+    "Se perderán las series que hayas anotado.": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Es perdran les sèries que hagis anotat."
+          }
+        }
+      }
+    },
+    "Se usa en botones, pestañas, el calendario y las gráficas.": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "S’utilitza als botons, a les pestanyes, al calendari i als gràfics."
+          }
+        }
+      }
+    },
+    "Segundos": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Segons"
+          }
+        }
+      }
+    },
+    "Semana de descarga": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Setmana de descàrrega"
+          }
+        }
+      }
+    },
+    "Sentadilla": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esquat"
+          }
+        }
+      }
+    },
+    "Serie %lld": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sèrie %lld"
+          }
+        }
+      }
+    },
+    "Series": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sèries"
+          }
+        }
+      }
+    },
+    "Sesiones": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sessions"
+          }
+        }
+      }
+    },
+    "Sin datos anteriores": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sense dades anteriors"
+          }
+        }
+      }
+    },
+    "Sin datos en este periodo": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sense dades en aquest període"
+          }
+        }
+      }
+    },
+    "Sin ejercicios": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sense exercicis"
+          }
+        }
+      }
+    },
+    "Sin entrenos este día": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cap entrenament aquest dia"
+          }
+        }
+      }
+    },
+    "Sin rutinas": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sense rutines"
+          }
+        }
+      }
+    },
+    "Sin series": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sense sèries"
+          }
+        }
+      }
+    },
+    "Sistema": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sistema"
+          }
+        }
+      }
+    },
+    "Sube %@": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Puja %@"
+          }
+        }
+      }
+    },
+    "Superas tu mejor marca de siempre.": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Superes la teva millor marca de sempre."
+          }
+        }
+      }
+    },
+    "Tiempo": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Temps"
+          }
+        }
+      }
+    },
+    "Tiempo total": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Temps total"
+          }
+        }
+      }
+    },
+    "Tirón": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estirada"
+          }
+        }
+      }
+    },
+    "Todo": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tot"
+          }
+        }
+      }
+    },
+    "Torso": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tors"
+          }
+        }
+      }
+    },
+    "Tríceps": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tríceps"
+          }
+        }
+      }
+    },
+    "Turquesa": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turquesa"
+          }
+        }
+      }
+    },
+    "Técnica, ajustes de la máquina…": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tècnica, ajustos de la màquina…"
+          }
+        }
+      }
+    },
+    "Ver comparación": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Veure la comparació"
+          }
+        }
+      }
+    },
+    "Verde": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verd"
+          }
+        }
+      }
+    },
+    "Versión": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Versió"
+          }
+        }
+      }
+    },
+    "Volumen": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Volum"
+          }
+        }
+      }
+    },
+    "Volumen por ejercicio": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Volum per exercici"
+          }
+        }
+      }
+    },
+    "Vuelve al mes actual": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Torna al mes actual"
+          }
+        }
+      }
+    },
+    "Ya tienes %lld entrenos": {
+      "localizations": {
+        "es": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Ya tienes %lld entreno"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Ya tienes %lld entrenos"
+                }
+              }
+            }
+          }
+        },
+        "ca": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Ja tens %lld entrenament"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Ja tens %lld entrenaments"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Zancadas": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gambades"
+          }
+        }
+      }
+    },
+    "desde el %@": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "des del %@"
+          }
+        }
+      }
+    },
+    "kg": {
+      "shouldTranslate": false
+    },
+    "por tiempo": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "per temps"
+          }
+        }
+      }
+    },
+    "reps": {
+      "shouldTranslate": false
+    },
+    "sin anotar": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "sense anotar"
+          }
+        }
+      }
+    },
+    "¡%lld nuevos récords personales!": {
+      "localizations": {
+        "es": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "¡%lld nuevo récord personal!"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "¡%lld nuevos récords personales!"
+                }
+              }
+            }
+          }
+        },
+        "ca": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld nou rècord personal!"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld nous rècords personals!"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "¡Entreno completado!": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entrenament completat!"
+          }
+        }
+      }
+    },
+    "¡Nuevo récord personal!": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nou rècord personal!"
+          }
+        }
+      }
+    },
+    "¿Borrar todos los entrenos y rutinas?": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vols esborrar tots els entrenaments i rutines?"
+          }
+        }
+      }
+    },
+    "¿Descartar este entreno?": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vols descartar aquest entrenament?"
+          }
+        }
+      }
+    },
+    "¿Eliminar esta rutina?": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vols eliminar aquesta rutina?"
+          }
+        }
+      }
+    },
+    "¿Eliminar este ejercicio?": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vols eliminar aquest exercici?"
+          }
+        }
+      }
+    },
+    "¿Eliminar este entreno?": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vols eliminar aquest entrenament?"
+          }
+        }
+      }
+    },
+    "¿Quitar este ejercicio?": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vols treure aquest exercici?"
+          }
+        }
+      }
+    },
+    "Índigo": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Indi"
+          }
+        }
+      }
+    },
+    "Última vez (%@): %@": {
+      "localizations": {
+        "ca": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Última vegada (%@): %@"
+          }
+        }
+      }
+    },
+    "—": {
+      "shouldTranslate": false
+    }
+  },
+  "version": "1.0"
+}

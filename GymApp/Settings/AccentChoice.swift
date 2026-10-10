@@ -12,15 +12,15 @@ nonisolated enum AccentChoice: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .blue: "Azul"
-        case .indigo: "Índigo"
-        case .purple: "Morado"
-        case .pink: "Rosa"
-        case .red: "Rojo"
-        case .orange: "Naranja"
-        case .green: "Verde"
-        case .mint: "Menta"
-        case .teal: "Turquesa"
+        case .blue: String(localized: "Azul")
+        case .indigo: String(localized: "Índigo")
+        case .purple: String(localized: "Morado")
+        case .pink: String(localized: "Rosa")
+        case .red: String(localized: "Rojo")
+        case .orange: String(localized: "Naranja")
+        case .green: String(localized: "Verde")
+        case .mint: String(localized: "Menta")
+        case .teal: String(localized: "Turquesa")
         }
     }
 

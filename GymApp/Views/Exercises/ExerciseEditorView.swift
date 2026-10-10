@@ -40,7 +40,7 @@ struct ExerciseEditorView: View {
                         .lineLimit(3...6)
                 }
             }
-            .navigationTitle(exercise == nil ? "Nuevo ejercicio" : "Editar ejercicio")
+            .navigationTitle(exercise == nil ? String(localized: "Nuevo ejercicio") : String(localized: "Editar ejercicio"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -57,10 +57,10 @@ struct ExerciseEditorView: View {
 
     private var footer: String {
         var text = type == .reps
-            ? "En cada serie anotarás repeticiones y peso."
-            : "En cada serie anotarás la duración, con cronómetro, y un peso opcional (lastre, disco…)."
+            ? String(localized: "En cada serie anotarás repeticiones y peso.")
+            : String(localized: "En cada serie anotarás la duración, con cronómetro, y un peso opcional (lastre, disco…).")
         if let exercise, exercise.trackingType != type, !exercise.workoutEntries.isEmpty {
-            text += " Cambiar el tipo no convierte las series ya registradas."
+            text += " " + String(localized: "Cambiar el tipo no convierte las series ya registradas.")
         }
         return text
     }

@@ -10,9 +10,9 @@ nonisolated enum AppAppearance: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .system: "Sistema"
-        case .light: "Claro"
-        case .dark: "Oscuro"
+        case .system: String(localized: "Sistema")
+        case .light: String(localized: "Claro")
+        case .dark: String(localized: "Oscuro")
         }
     }
 

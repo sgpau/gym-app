@@ -33,7 +33,7 @@ struct ProgressListView: View {
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                             .monospacedDigit()
-                        Text(item.sessions == 1 ? "1 sesión" : "\(item.sessions) sesiones")
+                        Text("\(item.sessions) sesiones")
                             .font(.caption)
                             .foregroundStyle(.tertiary)
                     }

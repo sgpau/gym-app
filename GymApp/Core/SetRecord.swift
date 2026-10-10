@@ -9,8 +9,8 @@ nonisolated enum TrackingType: String, Codable, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .reps: "Repeticiones"
-        case .time: "Tiempo"
+        case .reps: String(localized: "Repeticiones")
+        case .time: String(localized: "Tiempo")
         }
     }
 }

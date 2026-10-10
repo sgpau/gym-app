@@ -1,10 +1,12 @@
 import SwiftUI
+import UIKit
 
 struct SettingsView: View {
     @AppStorage(AppAppearance.storageKey) private var appearance: AppAppearance = .system
     @AppStorage(AccentChoice.storageKey) private var accent: AccentChoice = .blue
     @AppStorage("developerMode") private var developerMode = false
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.openURL) private var openURL
     @State private var versionTaps = 0
 
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 12), count: 5)
@@ -35,6 +37,17 @@ struct SettingsView: View {
                 }
 
                 Section {
+                    Button {
+                        if let url = URL(string: UIApplication.openSettingsURLString) { openURL(url) }
+                    } label: {
+                        LabeledContent("Idioma", value: currentLanguage)
+                            .foregroundStyle(.primary)
+                    }
+                } footer: {
+                    Text("La app está en castellano y catalán, y usa el idioma de tu iPhone. Para cambiarlo solo en esta app, pulsa aquí y elige Idioma.")
+                }
+
+                Section {
                     HStack {
                         Text("Versión")
                         Spacer()
@@ -60,6 +73,11 @@ struct SettingsView: View {
             .sensoryFeedback(.selection, trigger: appearance)
             .sensoryFeedback(.success, trigger: developerMode) { _, isOn in isOn }
         }
+    }
+
+    private var currentLanguage: String {
+        let code = Bundle.main.preferredLocalizations.first ?? "es"
+        return Locale.current.localizedString(forLanguageCode: code)?.capitalized(with: .current) ?? code
     }
 
     private var appVersion: String {

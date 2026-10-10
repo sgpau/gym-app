@@ -13,12 +13,12 @@ nonisolated enum ProgressMetric: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .maxWeight: "Peso máx."
-        case .oneRepMax: "1RM est."
-        case .volume: "Volumen"
-        case .totalReps: "Reps"
-        case .maxDuration: "Duración máx."
-        case .totalDuration: "Tiempo total"
+        case .maxWeight: String(localized: "Peso máx.")
+        case .oneRepMax: String(localized: "1RM est.")
+        case .volume: String(localized: "Volumen")
+        case .totalReps: String(localized: "Reps")
+        case .maxDuration: String(localized: "Duración máx.")
+        case .totalDuration: String(localized: "Tiempo total")
         }
     }
 

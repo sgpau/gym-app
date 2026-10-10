@@ -31,7 +31,7 @@ nonisolated enum Format {
     static func set(_ record: SetRecord, locale: Locale = .current) -> String {
         switch record {
         case .reps(let reps, let kg):
-            kg > 0 ? "\(weight(kg, locale: locale)) × \(reps)" : "\(reps) reps"
+            kg > 0 ? "\(weight(kg, locale: locale)) × \(reps)" : String(localized: "\(reps) reps")
         case .time(let seconds, let kg):
             kg > 0 ? "\(duration(seconds)) · \(weight(kg, locale: locale))" : duration(seconds)
         }
@@ -39,7 +39,7 @@ nonisolated enum Format {
 
     /// Resumen de varias series: "3×8 · 60 kg", "8, 8, 6 · 60 kg" o "3×1:00".
     static func setSummary(_ sets: [SetRecord], locale: Locale = .current) -> String {
-        guard !sets.isEmpty else { return "Sin series" }
+        guard !sets.isEmpty else { return String(localized: "Sin series") }
         let values = sets.map { set in
             switch set {
             case .reps(let reps, _): String(reps)
@@ -63,8 +63,8 @@ nonisolated enum Format {
 
     /// La diferencia con signo: "+2,5 kg", "−0:15", "Igual" o "Nuevo".
     static func change(_ delta: Delta, for metric: ProgressMetric, locale: Locale = .current) -> String {
-        guard let change = delta.change else { return "Nuevo" }
-        if abs(change) < 0.0001 { return "Igual" }
+        guard let change = delta.change else { return String(localized: "Nuevo") }
+        if abs(change) < 0.0001 { return String(localized: "Igual") }
         let sign = change > 0 ? "+" : "−"
         return sign + value(abs(change), for: metric, locale: locale)
     }

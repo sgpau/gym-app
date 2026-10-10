@@ -10,7 +10,7 @@ App nativa en SwiftUI + SwiftData (iOS 27) para:
 - **Ajustes**: modo Sistema / Claro / Oscuro y color principal a elegir.
 - **Herramientas de desarrollo (ocultas)**: cargar un año de datos de prueba, importar un JSON o borrar los entrenos.
 
-Los datos se guardan solo en el iPhone.
+Los datos se guardan solo en el iPhone. La app está en **castellano y catalán** y sigue el idioma del iPhone. Para cambiarlo solo en la app: Ajustes de iOS → Gym → Idioma, o desde la fila «Idioma» de los ajustes de la app.
 
 ## Ejecutarla en tu iPhone
 
@@ -73,13 +73,20 @@ GymApp/
   Models/      Modelos de SwiftData, datos iniciales y datos de ejemplo para las previews.
   Settings/    Apariencia, color principal y herramientas de desarrollo ocultas.
   Resources/   sample-data.json (un año de entrenos de prueba).
+  Localizable.xcstrings  Catálogo de textos: castellano (base) y catalán.
   Views/       Calendario, Entreno, Rutinas, Ejercicios, Progreso y componentes compartidos.
-scripts/       generate_sample_data.py, el generador de los datos de prueba.
+scripts/       generate_sample_data.py (datos de prueba) y build_strings_catalog.py (traducciones).
 Tests/         Tests de Core con Swift Testing.
 Package.swift  Compila Core como paquete para poder ejecutar los tests con `swift test`.
 ```
 
 `GymApp.xcodeproj` usa carpetas sincronizadas: cualquier archivo nuevo dentro de `GymApp/` entra solo en el target, sin tocar el proyecto.
+
+## Traducciones
+
+Los textos están en `GymApp/Localizable.xcstrings`; la clave de cada texto es la frase en castellano. Ese archivo se genera con `scripts/build_strings_catalog.py`: para corregir una traducción, edítala ahí y ejecuta `python3 scripts/build_strings_catalog.py`. También se puede editar directamente en Xcode.
+
+Los ejercicios precargados se crean con el nombre en el idioma que tenga el iPhone la primera vez que se abre la app. Al importar un JSON, los nombres conocidos en castellano (ejercicios y rutinas de prueba) se traducen al idioma actual.
 
 ## Tests
 

@@ -13,7 +13,7 @@ struct RoutineListView: View {
                 ForEach(routines) { routine in
                     NavigationLink(value: routine) {
                         VStack(alignment: .leading, spacing: 3) {
-                            Text(routine.name.isEmpty ? "Rutina sin nombre" : routine.name)
+                            Text(routine.name.isEmpty ? String(localized: "Rutina sin nombre") : routine.name)
                                 .font(.headline)
                             Text(subtitle(for: routine))
                                 .font(.subheadline)
@@ -61,7 +61,7 @@ struct RoutineListView: View {
 
     private func subtitle(for routine: Routine) -> String {
         let names = routine.sortedItems.compactMap { $0.exercise?.name }
-        return names.isEmpty ? "Sin ejercicios" : names.joined(separator: " · ")
+        return names.isEmpty ? String(localized: "Sin ejercicios") : names.joined(separator: " · ")
     }
 
     private func addRoutine() {

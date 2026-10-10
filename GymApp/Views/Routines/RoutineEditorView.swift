@@ -31,7 +31,7 @@ struct RoutineEditorView: View {
                 }
             }
         }
-        .navigationTitle(routine.name.isEmpty ? "Nueva rutina" : routine.name)
+        .navigationTitle(routine.name.isEmpty ? String(localized: "Nueva rutina") : routine.name)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             if !routine.items.isEmpty {
@@ -78,7 +78,7 @@ struct RoutineEditorView: View {
         if name.isEmpty && routine.items.isEmpty && routine.workouts.isEmpty {
             context.delete(routine)
         } else if name.isEmpty {
-            routine.name = "Rutina sin nombre"
+            routine.name = String(localized: "Rutina sin nombre")
         }
     }
 }
@@ -89,7 +89,7 @@ private struct RoutineItemRow: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text(item.exercise?.name ?? "Ejercicio")
+            Text(item.exercise?.name ?? String(localized: "Ejercicio"))
                 .font(.headline)
             Stepper("\(item.targetSets) series", value: $item.targetSets, in: 1...20)
                 .monospacedDigit()

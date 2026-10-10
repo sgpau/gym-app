@@ -3,7 +3,7 @@ import SwiftUI
 
 /// Selector de ejercicios con búsqueda, agrupados por músculo. Devuelve los elegidos en el orden en que se marcaron.
 struct ExercisePickerView: View {
-    var title: String
+    var title: LocalizedStringKey
     var onPick: ([Exercise]) -> Void
 
     @Environment(\.dismiss) private var dismiss
@@ -42,7 +42,7 @@ struct ExercisePickerView: View {
                     Button("Cancelar") { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(selection.isEmpty ? "Añadir" : "Añadir (\(selection.count))") {
+                    Button(selection.isEmpty ? String(localized: "Añadir") : String(localized: "Añadir (\(selection.count))")) {
                         onPick(selection.compactMap { id in exercises.first { $0.persistentModelID == id } })
                         dismiss()
                     }

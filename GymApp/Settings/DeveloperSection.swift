@@ -52,7 +52,7 @@ struct DeveloperSection: View {
         .fileImporter(isPresented: $showFileImporter, allowedContentTypes: [.json]) { result in
             switch result {
             case .success(let url): load { try DataImporter.backup(at: url) }
-            case .failure(let error): message = Message(title: "No se pudo abrir el archivo", text: error.localizedDescription)
+            case .failure(let error): message = Message(title: String(localized: "No se pudo abrir el archivo"), text: error.localizedDescription)
             }
         }
         .confirmationDialog(
@@ -68,7 +68,7 @@ struct DeveloperSection: View {
         }
         .confirmationDialog("¿Borrar todos los entrenos y rutinas?", isPresented: $confirmDelete, titleVisibility: .visible) {
             Button("Borrar", role: .destructive) {
-                perform { try DataImporter.deleteWorkoutsAndRoutines(in: context); return "Entrenos y rutinas borrados." }
+                perform { try DataImporter.deleteWorkoutsAndRoutines(in: context); return String(localized: "Entrenos y rutinas borrados.") }
             }
         } message: {
             Text("Los ejercicios se conservan. No se puede deshacer.")
@@ -88,7 +88,7 @@ struct DeveloperSection: View {
                 pendingImport = PendingImport(backup: backup)
             }
         } catch {
-            message = Message(title: "Archivo no válido", text: error.localizedDescription)
+            message = Message(title: String(localized: "Archivo no válido"), text: error.localizedDescription)
         }
     }
 
@@ -105,9 +105,9 @@ struct DeveloperSection: View {
         Task {
             try? await Task.sleep(for: .milliseconds(100))
             do {
-                message = Message(title: "Listo", text: try work())
+                message = Message(title: String(localized: "Listo"), text: try work())
             } catch {
-                message = Message(title: "Error", text: error.localizedDescription)
+                message = Message(title: String(localized: "Error"), text: error.localizedDescription)
             }
             isWorking = false
         }

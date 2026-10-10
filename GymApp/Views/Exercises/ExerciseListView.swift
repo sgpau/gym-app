@@ -75,10 +75,7 @@ struct ExerciseListView: View {
     }
 
     private func deletionMessage(for exercise: Exercise) -> String {
-        var parts: [String] = []
-        if !exercise.workoutEntries.isEmpty { parts.append("aparece en \(exercise.workoutEntries.count) entrenos") }
-        if !exercise.routineItems.isEmpty { parts.append("en \(exercise.routineItems.count) rutinas") }
-        return "Este ejercicio \(parts.joined(separator: " y ")). Se borrarán también esas series y no se puede deshacer."
+        String(localized: "Entrenos con este ejercicio: \(exercise.workoutEntries.count). Rutinas: \(exercise.routineItems.count). Se borrará también su historial y no se puede deshacer.")
     }
 }
 

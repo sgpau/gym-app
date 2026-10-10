@@ -49,10 +49,10 @@ struct DeltaBadge: View {
 
     private var accessibilityText: String {
         switch delta.trend {
-        case .up: "Sube \(Format.change(delta, for: metric))"
-        case .down: "Baja \(Format.change(delta, for: metric))"
-        case .same: "Igual que la vez anterior"
-        case .new: "Sin datos anteriores"
+        case .up: String(localized: "Sube \(Format.change(delta, for: metric))")
+        case .down: String(localized: "Baja \(Format.change(delta, for: metric))")
+        case .same: String(localized: "Igual que la vez anterior")
+        case .new: String(localized: "Sin datos anteriores")
         }
     }
 }

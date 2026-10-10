@@ -9,10 +9,10 @@ nonisolated enum ProgressRange: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .threeMonths: "3M"
-        case .sixMonths: "6M"
-        case .year: "1A"
-        case .all: "Todo"
+        case .threeMonths: String(localized: "3M")
+        case .sixMonths: String(localized: "6M")
+        case .year: String(localized: "1A")
+        case .all: String(localized: "Todo")
         }
     }
 
@@ -148,17 +148,17 @@ struct ExerciseProgressView: View {
         switch exercise.trackingType {
         case .reps:
             if bests.maxWeight > 0 {
-                cards.append(("Mejor peso", Format.weight(bests.maxWeight)))
-                cards.append(("1RM estimado", Format.weight(bests.oneRepMax, fractionDigits: 1)))
-                cards.append(("Más volumen", Format.weight(bests.volume)))
+                cards.append((String(localized: "Mejor peso"), Format.weight(bests.maxWeight)))
+                cards.append((String(localized: "1RM estimado"), Format.weight(bests.oneRepMax, fractionDigits: 1)))
+                cards.append((String(localized: "Más volumen"), Format.weight(bests.volume)))
             } else {
-                cards.append(("Más reps en una serie", "\(bests.maxReps)"))
+                cards.append((String(localized: "Más reps en una serie"), "\(bests.maxReps)"))
             }
         case .time:
-            cards.append(("Mejor tiempo", Format.duration(bests.maxDuration)))
-            if bests.maxWeight > 0 { cards.append(("Mejor peso", Format.weight(bests.maxWeight))) }
+            cards.append((String(localized: "Mejor tiempo"), Format.duration(bests.maxDuration)))
+            if bests.maxWeight > 0 { cards.append((String(localized: "Mejor peso"), Format.weight(bests.maxWeight))) }
         }
-        cards.append(("Sesiones", "\(bests.sessionCount)"))
+        cards.append((String(localized: "Sesiones"), "\(bests.sessionCount)"))
         return cards
     }
 

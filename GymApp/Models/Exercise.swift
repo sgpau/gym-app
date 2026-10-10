@@ -8,16 +8,16 @@ nonisolated enum MuscleGroup: String, Codable, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .chest: "Pecho"
-        case .back: "Espalda"
-        case .shoulders: "Hombros"
-        case .biceps: "Bíceps"
-        case .triceps: "Tríceps"
-        case .legs: "Piernas"
-        case .glutes: "Glúteos"
-        case .core: "Core"
-        case .cardio: "Cardio"
-        case .other: "Otros"
+        case .chest: String(localized: "Pecho")
+        case .back: String(localized: "Espalda")
+        case .shoulders: String(localized: "Hombros")
+        case .biceps: String(localized: "Bíceps")
+        case .triceps: String(localized: "Tríceps")
+        case .legs: String(localized: "Piernas")
+        case .glutes: String(localized: "Glúteos")
+        case .core: String(localized: "Core")
+        case .cardio: String(localized: "Cardio")
+        case .other: String(localized: "Otros")
         }
     }
 }

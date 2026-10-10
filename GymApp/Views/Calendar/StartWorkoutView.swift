@@ -4,7 +4,7 @@ import SwiftUI
 /// Elegir con qué rutina empezar (o entrenamiento libre).
 struct StartWorkoutView: View {
     let day: Date
-    var title = "Nuevo entreno"
+    var title: LocalizedStringKey = "Nuevo entreno"
     /// Entreno sin finalizar que se puede retomar.
     var inProgress: Workout?
     var onResume: (Workout) -> Void = { _ in }
@@ -20,7 +20,7 @@ struct StartWorkoutView: View {
                     Button { onResume(inProgress) } label: {
                         RoutineRowLabel(
                             title: inProgress.title,
-                            subtitle: "Empezado \(inProgress.date.formatted(.relative(presentation: .named)))",
+                            subtitle: String(localized: "Empezado \(inProgress.date.formatted(.relative(presentation: .named)))"),
                             systemImage: "play.circle.fill"
                         )
                     }
@@ -29,7 +29,11 @@ struct StartWorkoutView: View {
 
             Section {
                 Button { onPick(nil) } label: {
-                    RoutineRowLabel(title: "Entrenamiento libre", subtitle: "Añade los ejercicios sobre la marcha", systemImage: "bolt.fill")
+                    RoutineRowLabel(
+                        title: String(localized: "Entrenamiento libre"),
+                        subtitle: String(localized: "Añade los ejercicios sobre la marcha"),
+                        systemImage: "bolt.fill"
+                    )
                 }
             } footer: {
                 Text(day.dayTitle.capitalized(with: .current))
@@ -65,9 +69,9 @@ struct StartWorkoutView: View {
     }
 
     private func subtitle(for routine: Routine) -> String {
-        let count = "\(routine.items.count) ejercicios"
+        let count = String(localized: "\(routine.items.count) ejercicios")
         guard let last = routine.lastPerformed else { return count }
-        return "\(count) · Última vez: \(last.shortDay)"
+        return String(localized: "\(count) · Última vez: \(last.shortDay)")
     }
 }
 

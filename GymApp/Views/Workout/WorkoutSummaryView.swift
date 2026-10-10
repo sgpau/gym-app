@@ -51,7 +51,7 @@ struct WorkoutSummaryView: View {
 
     private func header(_ comparison: WorkoutComparison) -> some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text(onDone != nil ? "¡Entreno completado!" : workout.title)
+            Text(onDone != nil ? String(localized: "¡Entreno completado!") : workout.title)
                 .font(.largeTitle.bold())
             Text(onDone != nil ? "\(workout.title) · \(workout.date.dayTitle)" : workout.date.dayTitle.capitalized(with: .current))
                 .font(.headline)
@@ -64,12 +64,12 @@ struct WorkoutSummaryView: View {
 
     private func comparisonCaption(_ comparison: WorkoutComparison) -> String {
         if let date = comparison.previousDate {
-            return "Comparado con tu entreno del \(date.formatted(.dateTime.day().month(.wide)))"
+            return String(localized: "Comparado con tu entreno del \(date.formatted(.dateTime.day().month(.wide)))")
         }
         if workout.routine != nil {
-            return "Primera vez con esta rutina: cada ejercicio se compara con la última vez que lo hiciste."
+            return String(localized: "Primera vez con esta rutina: cada ejercicio se compara con la última vez que lo hiciste.")
         }
-        return "Cada ejercicio se compara con la última vez que lo hiciste."
+        return String(localized: "Cada ejercicio se compara con la última vez que lo hiciste.")
     }
 
     @ViewBuilder
@@ -96,7 +96,7 @@ struct WorkoutSummaryView: View {
                 .foregroundStyle(.orange)
                 .symbolEffect(.bounce, value: reduceMotion ? false : celebrate)
             VStack(alignment: .leading, spacing: 2) {
-                Text(count == 1 ? "¡Nuevo récord personal!" : "¡\(count) nuevos récords personales!")
+                Text(count == 1 ? String(localized: "¡Nuevo récord personal!") : String(localized: "¡\(count) nuevos récords personales!"))
                     .font(.headline)
                 Text("Superas tu mejor marca de siempre.")
                     .font(.subheadline)
@@ -109,6 +109,8 @@ struct WorkoutSummaryView: View {
 
     @ViewBuilder
     private func volumeChart(_ comparison: WorkoutComparison) -> some View {
+        let todayLabel = String(localized: "Hoy")
+        let previousLabel = String(localized: "Anterior")
         let rows = comparison.exercises.filter { $0.current.volume > 0 || ($0.previous?.volume ?? 0) > 0 }
         if !rows.isEmpty {
             VStack(alignment: .leading, spacing: 12) {
@@ -118,15 +120,15 @@ struct WorkoutSummaryView: View {
                     ForEach(rows) { row in
                         if let previous = row.previous?.volume {
                             BarMark(x: .value("Volumen", previous), y: .value("Ejercicio", row.name))
-                                .foregroundStyle(by: .value("Entreno", "Anterior"))
-                                .position(by: .value("Entreno", "Anterior"))
+                                .foregroundStyle(by: .value("Entreno", previousLabel))
+                                .position(by: .value("Entreno", previousLabel))
                         }
                         BarMark(x: .value("Volumen", row.current.volume), y: .value("Ejercicio", row.name))
-                            .foregroundStyle(by: .value("Entreno", "Hoy"))
-                            .position(by: .value("Entreno", "Hoy"))
+                            .foregroundStyle(by: .value("Entreno", todayLabel))
+                            .position(by: .value("Entreno", todayLabel))
                     }
                 }
-                .chartForegroundStyleScale(["Hoy": accent.color, "Anterior": Color.secondary.opacity(0.45)])
+                .chartForegroundStyleScale([todayLabel: accent.color, previousLabel: Color.secondary.opacity(0.45)])
                 .chartXAxis {
                     AxisMarks { value in
                         AxisGridLine()
@@ -143,7 +145,7 @@ struct WorkoutSummaryView: View {
 }
 
 private struct TotalTile: View {
-    let title: String
+    let title: LocalizedStringKey
     let delta: Delta
     let metric: ProgressMetric
 

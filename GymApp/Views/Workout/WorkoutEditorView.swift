@@ -40,7 +40,7 @@ struct WorkoutEditorView: View {
         .navigationBarBackButtonHidden()
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
-                Button(isNew ? "Cancelar" : "Cerrar") {
+                Button(isNew ? String(localized: "Cancelar") : String(localized: "Cerrar")) {
                     if isNew && !workout.entries.isEmpty {
                         confirmDiscard = true
                     } else {
@@ -49,7 +49,7 @@ struct WorkoutEditorView: View {
                 }
             }
             ToolbarItem(placement: .pinnedPrimary) {
-                Button(workout.isFinished ? "Guardar" : "Finalizar", action: onFinish)
+                Button(workout.isFinished ? String(localized: "Guardar") : String(localized: "Finalizar"), action: onFinish)
                     .buttonStyle(.glassProminent)
                     .disabled(workout.logs.isEmpty)
             }
@@ -91,9 +91,11 @@ struct ExerciseSetsSection: View {
 
     private var type: TrackingType { entry.exercise?.trackingType ?? .reps }
 
+    private var exerciseName: String { entry.exercise?.name ?? String(localized: "Ejercicio") }
+
     private var lastTime: String? {
         guard let log = entry.exercise?.logs(before: workout.date, excluding: workout).last else { return nil }
-        return "Última vez (\(log.date.shortDay)): \(Format.setSummary(log.sets))"
+        return String(localized: "Última vez (\(log.date.shortDay)): \(Format.setSummary(log.sets))")
     }
 
     var body: some View {
@@ -112,7 +114,7 @@ struct ExerciseSetsSection: View {
         } header: {
             HStack(alignment: .firstTextBaseline) {
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(entry.exercise?.name ?? "Ejercicio")
+                    Text(exerciseName)
                         .font(.headline)
                         .foregroundStyle(.primary)
                     if let lastTime {
@@ -129,7 +131,7 @@ struct ExerciseSetsSection: View {
                     Image(systemName: "ellipsis.circle")
                         .imageScale(.large)
                 }
-                .accessibilityLabel("Opciones de \(entry.exercise?.name ?? "ejercicio")")
+                .accessibilityLabel("Opciones de \(exerciseName)")
             }
         }
     }
