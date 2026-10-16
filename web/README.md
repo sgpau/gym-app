@@ -8,7 +8,7 @@ La misma app de rutinas que la versión Swift, pero como **app web instalable**.
 - **Progreso**: gráfica por ejercicio y periodo, récords e historial.
 - **Ajustes**: modo Sistema / Claro / Oscuro, 9 colores, castellano o catalán, y **exportar o importar una copia de seguridad (JSON)**.
 - **Menú oculto**: toca 7 veces «Versión» en Ajustes. Sirve para cargar un año de datos de prueba o borrar los entrenos y rutinas.
-- **Sin conexión**: funciona sin internet. Los datos se guardan solo en el iPhone (IndexedDB).
+- **Sin conexión**: funciona sin internet. Los datos se guardan solo en el iPhone (IndexedDB). La app pide almacenamiento persistente y Ajustes → Datos muestra si lo tiene.
 
 ## Instalarla en el iPhone
 
@@ -22,7 +22,7 @@ Los datos solo están en ese iPhone. Haz de vez en cuando **Ajustes → Exportar
 
 1. **Settings → General → Danger Zone → Change visibility → Public**. GitHub Pages gratis necesita un repo público, y con él todo el historial, incluidos los correos de los commits, pasa a ser visible.
 2. **Settings → Pages → Build and deployment → Source: GitHub Actions**.
-3. **Settings → Environments → github-pages → Deployment branches and tags**: añade la regla `claude/gym-pwa`. Si fusionas la rama en `main`, no hace falta.
+3. Si publicas desde `main`, no hace falta nada más. Si publicas desde `claude/gym-pwa`: **Settings → Environments → github-pages → Deployment branches and tags** → añade la regla `claude/gym-pwa`.
 4. Lanza la publicación: **Actions → Publicar la app en GitHub Pages → Run workflow** (o haz cualquier push que toque `web/`).
 
 ## Desarrollo
