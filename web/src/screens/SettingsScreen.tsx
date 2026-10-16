@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { parseBackup, serializeBackup, shiftDates, type GymBackup } from '../core/backup'
 import { deleteWorkoutsAndRoutines, exportBackup, importBackup } from '../db/importer'
 import type { Key } from '../i18n'
@@ -20,6 +20,11 @@ export function SettingsScreen() {
   const [taps, setTaps] = useState(0)
   const fileInput = useRef<HTMLInputElement>(null)
   const standalone = typeof matchMedia !== 'undefined' && (matchMedia('(display-mode: standalone)').matches || (navigator as { standalone?: boolean }).standalone)
+  // undefined mientras se consulta o si el navegador no lo sabe decir: entonces no se muestra la fila.
+  const [persisted, setPersisted] = useState<boolean>()
+  useEffect(() => {
+    navigator.storage?.persisted?.().then(setPersisted, () => {})
+  }, [])
 
   const tapVersion = () => {
     if (settings.developerMode) return
@@ -133,7 +138,8 @@ export function SettingsScreen() {
         />
       </Section>
 
-      <Section header={t('data')} footer={t('dataFooter')}>
+      <Section header={t('data')} footer={persisted === false && !standalone ? t('storageFooterInstall') : t('dataFooter')}>
+        {persisted !== undefined && <Row title={t('storage')} value={t(persisted ? 'storagePersistent' : 'storageEvictable')} />}
         <Row className="action" title={t('exportBackup')} onClick={exportFile} />
         <Row className="action" title={t('importFile')} onClick={() => fileInput.current?.click()} />
       </Section>
