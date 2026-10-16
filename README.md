@@ -12,7 +12,12 @@ App nativa en SwiftUI + SwiftData (iOS 27) para:
 
 Los datos se guardan solo en el iPhone. La app está en **castellano y catalán** y sigue el idioma del iPhone. Para cambiarlo solo en la app: Ajustes de iOS → Gym → Idioma, o desde la fila «Idioma» de los ajustes de la app.
 
+## Versión web instalable (sin Xcode)
+
+En la carpeta [`web/`](web/README.md) está la misma app como **PWA**. Se publica sola en GitHub Pages con cada push y se instala en el iPhone desde Safari: abre **https://sgpau.github.io/gym-app/** → Compartir → **Añadir a pantalla de inicio**. No necesita Mac ni Xcode y no caduca.
+
 ## Ejecutarla en tu iPhone
+
 
 Necesitas un Mac con **Xcode 27** y un iPhone con **iOS 27**.
 

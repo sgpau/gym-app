@@ -180,10 +180,14 @@ def main():
     }
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
+    web_copy = OUTPUT.parent.parent.parent / "web" / "public" / "sample-data.json"
     # Un entreno por línea: legible y sin inflar el tamaño.
     lines = ",\n    ".join(json.dumps(w, ensure_ascii=False, separators=(",", ":")) for w in backup["workouts"])
     header = json.dumps({k: v for k, v in backup.items() if k != "workouts"}, ensure_ascii=False, indent=2)
-    args.output.write_text(header[:-2] + ',\n  "workouts": [\n    ' + lines + "\n  ]\n}\n", encoding="utf-8")
+    text = header[:-2] + ',\n  "workouts": [\n    ' + lines + "\n  ]\n}\n"
+    args.output.write_text(text, encoding="utf-8")
+    if args.output == OUTPUT and web_copy.parent.exists():
+        web_copy.write_text(text, encoding="utf-8")  # la PWA usa el mismo archivo
 
     sets = sum(len(e["sets"]) for w in backup["workouts"] for e in w["exercises"])
     print(f"{args.output}: {len(backup['workouts'])} entrenos, {sets} series, "
