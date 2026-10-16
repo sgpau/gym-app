@@ -112,7 +112,16 @@ export async function exportBackup(db: GymDatabase): Promise<GymBackup> {
         notes: w.notes,
         exercises: w.entries.flatMap((e) => {
           const exercise = byId.get(e.exerciseId)
-          return exercise ? [{ exercise: exercise.name, sets: e.sets.map((s) => clean({ ...s })) }] : []
+          return exercise
+            ? [{
+                exercise: exercise.name,
+                sets: e.sets.map((s) => ({
+                  ...(s.reps !== null ? { reps: s.reps } : {}),
+                  ...(s.duration !== null ? { duration: s.duration } : {}),
+                  ...(s.weight !== null ? { weight: s.weight } : {}),
+                })),
+              }]
+            : []
         }),
       })),
   }
