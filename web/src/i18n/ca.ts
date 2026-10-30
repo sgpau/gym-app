@@ -241,4 +241,6 @@ export const ca: Record<keyof typeof es, Entry> = {
   chooseRoutine: 'Triar rutina',
   editPlan: 'Editar pla',
   targetReps: '{sets} × {reps}',
+  chooseOther: 'Triar-ne un altre',
+  pendingWorkouts: 'Entrenaments pendents',
 }

@@ -5,6 +5,7 @@ import { makeWorkout } from '../db/factory'
 import type { Routine } from '../db/model'
 import { db, useApp, useData } from '../state'
 import { shortDay } from '../ui/dates'
+import { useDialogs } from '../ui/dialogs'
 import { ArrowDown, ArrowUp, CheckCircle, Circle, ListIcon, PlayIcon, PlusIcon, TrashIcon } from '../ui/icons'
 import { BarButton, Empty, Row, Screen, Section } from '../ui/kit'
 import { useNav, useSheet } from '../ui/nav'
@@ -27,10 +28,20 @@ export function TodayScreen() {
   const { plan, routines, workouts, exerciseMap, loaded } = useData()
   const nav = useNav()
   const sheet = useSheet()
+  const dialogs = useDialogs()
   const now = useNow()
   const routineById = new Map(routines.map((r) => [r.id, r]))
   const progress = planProgress(plan, workouts, now)
   const editPlan = () => nav.push(<PlanEditor />, t('tabToday'))
+  const routineName = (index: number) => routineById.get(progress.slots[index].routineId)?.name || t('unnamedRoutine')
+
+  // Hueco elegido para hoy en lugar del primero pendiente. Los que se saltan siguen pendientes.
+  const [chosen, setChosen] = useState<number | null>(null)
+  const planKey = plan.join(',')
+  const today = now.toDateString()
+  useEffect(() => setChosen(null), [planKey, today])
+  const pending = progress.slots.flatMap((slot, index) => (slot.workoutId === null ? [index] : []))
+  const shown = chosen !== null && pending.includes(chosen) ? chosen : progress.next
 
   const start = async (routine: Routine) => {
     const workout = makeWorkout(routine, now, workouts, exerciseMap)
@@ -38,6 +49,14 @@ export function TodayScreen() {
     sheet.present(<WorkoutFlow workoutId={workout.id} isNew />, { full: true })
   }
   const open = (workoutId: string) => sheet.present(<WorkoutFlow workoutId={workoutId} />, { full: true })
+  const startSlot = (index: number) => {
+    const routine = routineById.get(progress.slots[index].routineId)
+    if (routine) void start(routine)
+  }
+  /** Con el entreno de hoy hecho, elegir uno pendiente lo empieza; si no, pasa a ser el de hoy. */
+  const pick = (index: number) => (progress.doneToday ? startSlot(index) : setChosen(index))
+  const choosePending = (exclude: number | null) =>
+    dialogs.actions(t('pendingWorkouts'), pending.filter((i) => i !== exclude).map((i) => ({ label: routineName(i), onSelect: () => pick(i) })))
 
   return (
     <Screen
@@ -57,7 +76,10 @@ export function TodayScreen() {
           <div style={{ padding: '0 16px 28px' }}>
             <TodayCard
               progress={progress}
+              shown={shown}
               routineById={routineById}
+              canChoose={pending.length > 1}
+              onChoose={() => choosePending(progress.doneToday ? null : shown)}
               onStart={start}
               onOpen={open}
               onSummary={(id) => sheet.present(<WorkoutSummaryScreen workoutId={id} />)}
@@ -68,15 +90,19 @@ export function TodayScreen() {
             {progress.slots.map((slot, index) => {
               const routine = routineById.get(slot.routineId)
               const done = workouts.find((w) => w.id === slot.workoutId)
+              const highlighted = !progress.doneToday && !progress.inProgress && index === shown
               return (
                 <Row
                   key={index}
                   leading={done
                     ? <CheckCircle width={24} height={24} className="accent" />
-                    : <Circle width={24} height={24} className={index === progress.next ? 'accent' : 'tertiary'} />}
-                  title={<span style={index === progress.next ? { fontWeight: 600 } : undefined}>{routine?.name || t('unnamedRoutine')}</span>}
+                    : <Circle width={24} height={24} className={highlighted ? 'accent' : 'tertiary'} />}
+                  title={<span style={highlighted ? { fontWeight: 600 } : undefined}>{routine?.name || t('unnamedRoutine')}</span>}
                   value={done ? shortDay(new Date(done.date), locale) : undefined}
-                  onClick={done ? () => sheet.present(<WorkoutSummaryScreen workoutId={done.id} />) : undefined}
+                  chevron={!done && !highlighted && !progress.inProgress}
+                  onClick={done
+                    ? () => sheet.present(<WorkoutSummaryScreen workoutId={done.id} />)
+                    : highlighted || progress.inProgress ? undefined : () => pick(index)}
                 />
               )
             })}
@@ -87,9 +113,13 @@ export function TodayScreen() {
   )
 }
 
-function TodayCard({ progress, routineById, onStart, onOpen, onSummary, onAnyway }: {
+function TodayCard({ progress, shown, routineById, canChoose, onChoose, onStart, onOpen, onSummary, onAnyway }: {
   progress: PlanProgress
+  /** Hueco que se propone hoy: el primero pendiente o el elegido. */
+  shown: number | null
   routineById: Map<string, Routine>
+  canChoose: boolean
+  onChoose: () => void
   onStart: (r: Routine) => void
   onOpen: (workoutId: string) => void
   onSummary: (workoutId: string) => void
@@ -98,7 +128,9 @@ function TodayCard({ progress, routineById, onStart, onOpen, onSummary, onAnyway
   const { t } = useApp()
   const { exerciseMap } = useData()
   const total = progress.slots.length
-  const next = progress.next === null ? null : routineById.get(progress.slots[progress.next].routineId) ?? null
+  const routineAt = (index: number | null) => (index === null ? null : routineById.get(progress.slots[index].routineId) ?? null)
+  const next = routineAt(progress.next)
+  const current = routineAt(shown)
 
   if (progress.inProgress) {
     return (
@@ -118,12 +150,12 @@ function TodayCard({ progress, routineById, onStart, onOpen, onSummary, onAnyway
         </div>
         <div className="secondary">{next ? t('tomorrow', { name: next.name || t('unnamedRoutine') }) : t('weekDoneAfterToday')}</div>
         <button className="primary-button" onClick={() => onSummary(progress.doneToday!)}>{t('viewSummary')}</button>
-        {next && <button className="bar-button" style={{ justifySelf: 'center' }} onClick={() => onStart(next)}>{t('doAnyway')}</button>}
+        {next && <button className="bar-button" style={{ justifySelf: 'center' }} onClick={() => (canChoose ? onChoose() : onStart(next))}>{t('doAnyway')}</button>}
       </div>
     )
   }
 
-  if (!next) {
+  if (!current) {
     return (
       <div className="card" style={{ display: 'grid', gap: 12 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
@@ -139,11 +171,11 @@ function TodayCard({ progress, routineById, onStart, onOpen, onSummary, onAnyway
   return (
     <div className="card" style={{ display: 'grid', gap: 14 }}>
       <div>
-        <div className="secondary" style={{ fontSize: 15, fontWeight: 600 }}>{t('workoutOfWeek', { i: progress.next! + 1, n: total })}</div>
-        <h2 style={{ margin: '2px 0 0', fontSize: 28, fontWeight: 800 }}>{next.name || t('unnamedRoutine')}</h2>
+        <div className="secondary" style={{ fontSize: 15, fontWeight: 600 }}>{t('workoutOfWeek', { i: shown! + 1, n: total })}</div>
+        <h2 style={{ margin: '2px 0 0', fontSize: 28, fontWeight: 800 }}>{current.name || t('unnamedRoutine')}</h2>
       </div>
       <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'grid', gap: 6 }}>
-        {next.items.map((item, index) => {
+        {current.items.map((item, index) => {
           const exercise = exerciseMap.get(item.exerciseId)
           if (!exercise) return null
           const target = exercise.trackingType === 'time'
@@ -157,7 +189,8 @@ function TodayCard({ progress, routineById, onStart, onOpen, onSummary, onAnyway
           )
         })}
       </ul>
-      <button className="primary-button" onClick={() => onStart(next)}><PlayIcon width={18} height={18} /> {t('startWorkout')}</button>
+      <button className="primary-button" onClick={() => onStart(current)}><PlayIcon width={18} height={18} /> {t('startWorkout')}</button>
+      {canChoose && <button className="bar-button" style={{ justifySelf: 'center' }} onClick={onChoose}>{t('chooseOther')}</button>}
     </div>
   )
 }

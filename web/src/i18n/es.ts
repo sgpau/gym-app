@@ -257,4 +257,6 @@ export const es = {
   chooseRoutine: 'Elegir rutina',
   editPlan: 'Editar plan',
   targetReps: '{sets} × {reps}',
+  chooseOther: 'Elegir otro',
+  pendingWorkouts: 'Entrenos pendientes',
 } satisfies Dict

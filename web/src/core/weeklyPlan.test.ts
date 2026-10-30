@@ -38,6 +38,16 @@ describe('plan semanal', () => {
     expect(p.next).toBe(1)
   })
 
+  it('saltarse uno lo deja pendiente', () => {
+    const c = w('C', day(2026, 10, 27))
+    const today = planProgress(['A', 'B', 'C'], [c], day(2026, 10, 27))
+    expect(today.next).toBe(0)
+    expect(today.doneToday).toBe(c.id)
+    const tomorrow = planProgress(['A', 'B', 'C'], [c], day(2026, 10, 28))
+    expect(tomorrow.next).toBe(0)
+    expect(tomorrow.slots.map((s) => s.workoutId)).toEqual([null, null, c.id])
+  })
+
   it('ignora la semana anterior, los libres y las rutinas fuera del plan', () => {
     const workouts = [w('A', day(2026, 10, 25)), w(null, day(2026, 10, 27)), w('X', day(2026, 10, 27))]
     const p = planProgress(['A', 'B'], workouts, day(2026, 10, 27))
