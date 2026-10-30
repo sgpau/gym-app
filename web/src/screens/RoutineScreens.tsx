@@ -3,9 +3,10 @@ import { formatDuration } from '../core/format'
 import { newId, type Routine, type RoutineItem } from '../db/model'
 import { db, useApp, useData } from '../state'
 import { useDialogs } from '../ui/dialogs'
-import { ArrowDown, ArrowUp, ListIcon, PlusIcon, TrashIcon } from '../ui/icons'
+import { ListIcon, PlusIcon, TrashIcon } from '../ui/icons'
 import { BarButton, Empty, Row, Screen, Section, Stepper } from '../ui/kit'
 import { useNav, useSheet } from '../ui/nav'
+import { moveItem, SortableList } from '../ui/sortable'
 import { ExercisePicker } from './ExerciseScreens'
 
 export function RoutineListScreen() {
@@ -71,12 +72,6 @@ function RoutineEditor({ routineId, isNew = false }: { routineId: string; isNew?
   const save = (patch: Partial<Routine>) => db.routines.update(routine.id, patch)
   const setItems = (items: RoutineItem[]) => save({ items })
   const updateItem = (index: number, patch: Partial<RoutineItem>) => setItems(routine.items.map((item, i) => (i === index ? { ...item, ...patch } : item)))
-  const move = (index: number, by: number) => {
-    const items = [...routine.items]
-    const [item] = items.splice(index, 1)
-    items.splice(index + by, 0, item)
-    setItems(items)
-  }
 
   return (
     <Screen
@@ -97,26 +92,32 @@ function RoutineEditor({ routineId, isNew = false }: { routineId: string; isNew?
         </Row>
       </Section>
       <Section header={t('exercises')}>
-        {routine.items.map((item, index) => {
-          const exercise = exerciseMap.get(item.exerciseId)
-          if (!exercise) return null
-          return (
-            <div className="row" key={`${item.exerciseId}-${index}`} style={{ flexDirection: 'column', alignItems: 'stretch', gap: 8 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                <strong style={{ flex: 1, fontWeight: 600 }} className="truncate">{exercise.name}</strong>
-                <button className="bar-button" aria-label={t('moveUp')} disabled={index === 0} onClick={() => move(index, -1)}><ArrowUp width={18} height={18} /></button>
-                <button className="bar-button" aria-label={t('moveDown')} disabled={index === routine.items.length - 1} onClick={() => move(index, 1)}><ArrowDown width={18} height={18} /></button>
-                <button className="bar-button" style={{ color: 'var(--red)' }} aria-label={t('remove')} onClick={() => setItems(routine.items.filter((_, i) => i !== index))}><TrashIcon width={18} height={18} /></button>
-              </div>
-              <StepperRow label={t('setsCount', { n: item.sets })} value={item.sets} min={1} max={20} onChange={(sets) => updateItem(index, { sets })} />
-              {exercise.trackingType === 'time' ? (
-                <StepperRow label={t('perSet', { v: formatDuration(item.duration) })} value={item.duration} min={5} max={3600} step={15} onChange={(duration) => updateItem(index, { duration })} />
-              ) : (
-                <StepperRow label={t('repetitionsCount', { n: item.reps })} value={item.reps} min={1} max={100} onChange={(reps) => updateItem(index, { reps })} />
-              )}
-            </div>
-          )
-        })}
+        <SortableList
+          items={routine.items}
+          onMove={(from, to) => setItems(moveItem(routine.items, from, to))}
+          itemClassName="row"
+          itemStyle={{ flexDirection: 'column', alignItems: 'stretch', gap: 8 }}
+          handleLabel={t('reorder')}
+          renderItem={(item, index, handle) => {
+            const exercise = exerciseMap.get(item.exerciseId)
+            if (!exercise) return null
+            return (
+              <>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                  {handle}
+                  <strong style={{ flex: 1, fontWeight: 600 }} className="truncate">{exercise.name}</strong>
+                  <button className="bar-button" style={{ color: 'var(--red)' }} aria-label={t('remove')} onClick={() => setItems(routine.items.filter((_, i) => i !== index))}><TrashIcon width={18} height={18} /></button>
+                </div>
+                <StepperRow label={t('setsCount', { n: item.sets })} value={item.sets} min={1} max={20} onChange={(sets) => updateItem(index, { sets })} />
+                {exercise.trackingType === 'time' ? (
+                  <StepperRow label={t('perSet', { v: formatDuration(item.duration) })} value={item.duration} min={5} max={3600} step={15} onChange={(duration) => updateItem(index, { duration })} />
+                ) : (
+                  <StepperRow label={t('repetitionsCount', { n: item.reps })} value={item.reps} min={1} max={100} onChange={(reps) => updateItem(index, { reps })} />
+                )}
+              </>
+            )
+          }}
+        />
         <Row
           className="action"
           leading={<PlusIcon width={20} height={20} />}

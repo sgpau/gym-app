@@ -225,6 +225,10 @@ input, textarea, select {
 }
 .row.indent + .row::before, .row + .row.indent::before { left: 52px; }
 button.row { transition: background 100ms; }
+/* Asa para reordenar arrastrando: el gesto no debe desplazar la pantalla. */
+.drag-handle { touch-action: none; color: var(--label-3); cursor: grab; -webkit-user-select: none; user-select: none; }
+.drag-handle:active { opacity: 1; cursor: grabbing; }
+.row.lifted { box-shadow: 0 8px 24px rgb(0 0 0 / 0.18); }
 button.row:active { background: var(--fill-2); }
 .row-main { flex: 1; min-width: 0; }
 .row-title { font-size: 17px; }
