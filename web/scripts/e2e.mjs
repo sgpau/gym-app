@@ -18,6 +18,9 @@ async function run(name, { colorScheme = 'light', locale = 'es-ES' } = {}) {
   await page.goto(url)
   await page.waitForSelector('.tabbar')
   await page.waitForTimeout(500)
+  await shot('00-today-empty')
+  await tap('.tab:nth-child(2)')
+  await page.waitForTimeout(300)
   await shot('01-calendar-empty')
 
   // Ajustes → 7 toques en Versión → cargar datos de prueba
@@ -54,7 +57,7 @@ async function run(name, { colorScheme = 'light', locale = 'es-ES' } = {}) {
   await page.waitForTimeout(600)
 
   // Progreso → Press de banca
-  await page.locator('.tab').nth(3).click()
+  await page.locator('.tab').nth(4).click()
   await page.waitForTimeout(400)
   await shot('08-progress-list')
   await page.locator('button.row:visible', { hasText: /Press de banca/ }).first().click()
@@ -62,10 +65,10 @@ async function run(name, { colorScheme = 'light', locale = 'es-ES' } = {}) {
   await shot('09-progress-detail')
 
   // Rutinas y ejercicios
-  await page.locator('.tab').nth(1).click()
+  await page.locator('.tab').nth(2).click()
   await page.waitForTimeout(300)
   await shot('10-routines')
-  await page.locator('.tab').nth(2).click()
+  await page.locator('.tab').nth(3).click()
   await page.waitForTimeout(300)
   await shot('11-exercises')
   await context.close()

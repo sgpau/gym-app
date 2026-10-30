@@ -3,12 +3,13 @@ import { CalendarScreen } from './screens/CalendarScreen'
 import { ExerciseListScreen } from './screens/ExerciseScreens'
 import { ProgressListScreen } from './screens/ProgressScreens'
 import { RoutineListScreen } from './screens/RoutineScreens'
+import { TodayScreen } from './screens/TodayScreen'
 import { AppProvider, DataProvider, useApp } from './state'
 import { DialogHost } from './ui/dialogs'
-import { CalendarIcon, ChartIcon, DumbbellIcon, ListIcon } from './ui/icons'
+import { CalendarIcon, ChartIcon, DumbbellIcon, FlameIcon, ListIcon } from './ui/icons'
 import { SheetHost, Stack } from './ui/nav'
 
-type Tab = 'calendar' | 'routines' | 'exercises' | 'progress'
+type Tab = 'today' | 'calendar' | 'routines' | 'exercises' | 'progress'
 
 export function App() {
   return (
@@ -26,8 +27,9 @@ export function App() {
 
 function Shell() {
   const { t } = useApp()
-  const [tab, setTab] = useState<Tab>('calendar')
+  const [tab, setTab] = useState<Tab>('today')
   const tabs: { id: Tab; label: string; icon: JSX.Element; root: JSX.Element }[] = [
+    { id: 'today', label: t('tabToday'), icon: <FlameIcon />, root: <TodayScreen /> },
     { id: 'calendar', label: t('tabCalendar'), icon: <CalendarIcon />, root: <CalendarScreen /> },
     { id: 'routines', label: t('tabRoutines'), icon: <ListIcon />, root: <RoutineListScreen /> },
     { id: 'exercises', label: t('tabExercises'), icon: <DumbbellIcon />, root: <ExerciseListScreen /> },

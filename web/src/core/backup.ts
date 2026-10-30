@@ -7,6 +7,8 @@ export interface GymBackup {
   exercises: BackupExercise[]
   routines: BackupRoutine[]
   workouts: BackupWorkout[]
+  /** Nombres de las rutinas del plan semanal, en orden. Opcional. */
+  weeklyPlan?: string[]
 }
 
 export interface BackupExercise {
@@ -66,6 +68,7 @@ export function parseBackup(text: string): GymBackup {
     exercises: list('exercises') as unknown as BackupExercise[],
     routines: (list('routines') as unknown as BackupRoutine[]).map((r) => ({ name: String(r.name), items: r.items ?? [] })),
     workouts,
+    ...(Array.isArray(data.weeklyPlan) ? { weeklyPlan: data.weeklyPlan.map(String) } : {}),
   }
 }
 

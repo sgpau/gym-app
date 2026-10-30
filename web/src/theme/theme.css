@@ -191,7 +191,7 @@ input, textarea, select {
   position: absolute; left: 0; right: 0; bottom: 0; z-index: 20;
   height: calc(var(--tab-h) + var(--safe-bottom));
   padding-bottom: var(--safe-bottom);
-  display: grid; grid-template-columns: repeat(4, 1fr);
+  display: grid; grid-auto-flow: column; grid-auto-columns: 1fr;
   background: var(--bar);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
   backdrop-filter: saturate(180%) blur(20px);

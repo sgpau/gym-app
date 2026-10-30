@@ -5,7 +5,7 @@ import { parseBackup, serializeBackup, shiftDates } from '../core/backup'
 import { day } from '../test/helpers'
 import { makeWorkout, workoutDate } from './factory'
 import { exerciseLogs, previousWorkoutOfRoutine, workoutComparison } from './history'
-import { exportBackup, importBackup } from './importer'
+import { deleteWorkoutsAndRoutines, exportBackup, importBackup } from './importer'
 import { GymDatabase, type Exercise } from './model'
 import { localizedName, seedIfEmpty } from './seed'
 
@@ -95,6 +95,23 @@ describe('base de datos', () => {
     const reparsed = parseBackup(serializeBackup(exported))
     expect(reparsed.workouts).toHaveLength(await db.workouts.count())
     expect(reparsed.routines).toHaveLength(4)
+  })
+
+  it('el plan semanal se exporta, se importa y se borra con las rutinas', async () => {
+    await seedIfEmpty(db, 'es')
+    await importBackup(db, parseBackup(sample), 'es')
+    const byName = new Map((await db.routines.toArray()).map((r) => [r.name, r.id]))
+    await db.plan.put({ id: 'week', routineIds: [byName.get('Pierna')!, byName.get('Empuje')!] })
+    const text = serializeBackup(await exportBackup(db))
+    expect(parseBackup(text).weeklyPlan).toEqual(['Pierna', 'Empuje'])
+
+    const other = new GymDatabase(`test-${counter++}`)
+    await importBackup(other, parseBackup(text), 'es')
+    const names = new Map((await other.routines.toArray()).map((r) => [r.id, r.name]))
+    expect((await other.plan.get('week'))!.routineIds.map((id) => names.get(id))).toEqual(['Pierna', 'Empuje'])
+
+    await deleteWorkoutsAndRoutines(other)
+    expect(await other.plan.count()).toBe(0)
   })
 
   it('compara el último entreno con el anterior de su rutina', async () => {

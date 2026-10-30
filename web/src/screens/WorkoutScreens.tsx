@@ -16,9 +16,12 @@ import { BarButton, Empty, NumberField, Row, Screen, Section } from '../ui/kit'
 import { useNav, useSheet } from '../ui/nav'
 import { ExercisePicker } from './ExerciseScreens'
 
-/** Hoja a pantalla completa: elegir rutina → registrar → finalizar → resumen. */
-export function WorkoutFlow({ day, workoutId }: { day?: Date; workoutId?: string }) {
-  return workoutId ? <WorkoutEditor workoutId={workoutId} isNew={false} /> : <StartWorkout day={day ?? new Date()} />
+/**
+ * Hoja a pantalla completa: elegir rutina → registrar → finalizar → resumen.
+ * Con `isNew`, el entreno recién creado se descarta al cancelar.
+ */
+export function WorkoutFlow({ day, workoutId, isNew = false }: { day?: Date; workoutId?: string; isNew?: boolean }) {
+  return workoutId ? <WorkoutEditor workoutId={workoutId} isNew={isNew} /> : <StartWorkout day={day ?? new Date()} />
 }
 
 function StartWorkout({ day }: { day: Date }) {
