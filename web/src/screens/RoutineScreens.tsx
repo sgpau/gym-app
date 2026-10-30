@@ -109,10 +109,8 @@ function RoutineEditor({ routineId, isNew = false }: { routineId: string; isNew?
                   <button className="bar-button" style={{ color: 'var(--red)' }} aria-label={t('remove')} onClick={() => setItems(routine.items.filter((_, i) => i !== index))}><TrashIcon width={18} height={18} /></button>
                 </div>
                 <StepperRow label={t('setsCount', { n: item.sets })} value={item.sets} min={1} max={20} onChange={(sets) => updateItem(index, { sets })} />
-                {exercise.trackingType === 'time' ? (
+                {exercise.trackingType === 'time' && (
                   <StepperRow label={t('perSet', { v: formatDuration(item.duration) })} value={item.duration} min={5} max={3600} step={15} onChange={(duration) => updateItem(index, { duration })} />
-                ) : (
-                  <StepperRow label={t('repetitionsCount', { n: item.reps })} value={item.reps} min={1} max={100} onChange={(reps) => updateItem(index, { reps })} />
                 )}
               </>
             )
