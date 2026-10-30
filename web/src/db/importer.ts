@@ -18,7 +18,7 @@ const key = (name: string) => name.trim().toLowerCase()
  * mayúsculas) se reutilizan; los nombres conocidos se traducen al idioma activo.
  */
 export async function importBackup(db: GymDatabase, backup: GymBackup, lang: Lang, options: { replace?: boolean } = {}): Promise<ImportResult> {
-  return db.transaction('rw', db.exercises, db.routines, db.workouts, async () => {
+  return db.transaction('rw', [db.exercises, db.routines, db.workouts, db.plan], async () => {
     if (options.replace) await deleteWorkoutsAndRoutines(db)
     const result: ImportResult = { exercisesCreated: 0, routinesCreated: 0, workoutsImported: 0, setsImported: 0 }
 
@@ -80,13 +80,18 @@ export async function importBackup(db: GymDatabase, backup: GymBackup, lang: Lan
     await db.exercises.bulkAdd(newExercises)
     await db.routines.bulkAdd(newRoutines)
     await db.workouts.bulkAdd(workouts)
+    // El plan del archivo solo sustituye al actual si se reemplaza todo o aún no hay plan.
+    if (backup.weeklyPlan?.length && (options.replace || !(await db.plan.get('week'))?.routineIds.length)) {
+      const routineIds = backup.weeklyPlan.flatMap((name) => routines.get(key(localizedName(name, lang)))?.id ?? [])
+      await db.plan.put({ id: 'week', routineIds })
+    }
     return result
   })
 }
 
 /** Copia de seguridad completa en el mismo formato que se importa. */
 export async function exportBackup(db: GymDatabase): Promise<GymBackup> {
-  const [exercises, routines, workouts] = await Promise.all([db.exercises.toArray(), db.routines.toArray(), db.workouts.toArray()])
+  const [exercises, routines, workouts, plan] = await Promise.all([db.exercises.toArray(), db.routines.toArray(), db.workouts.toArray(), db.plan.get('week')])
   const byId = new Map(exercises.map((e) => [e.id, e]))
   const routineName = new Map(routines.map((r) => [r.id, r.name]))
   const clean = <T extends object>(o: T) => Object.fromEntries(Object.entries(o).filter(([, v]) => v !== null && v !== undefined && v !== '')) as T
@@ -124,6 +129,7 @@ export async function exportBackup(db: GymDatabase): Promise<GymBackup> {
             : []
         }),
       })),
+    ...(plan?.routineIds.length ? { weeklyPlan: plan.routineIds.flatMap((id) => routineName.get(id) ?? []) } : {}),
   }
 }
 
@@ -131,4 +137,5 @@ export async function exportBackup(db: GymDatabase): Promise<GymBackup> {
 export async function deleteWorkoutsAndRoutines(db: GymDatabase) {
   await db.workouts.clear()
   await db.routines.clear()
+  await db.plan.clear()
 }

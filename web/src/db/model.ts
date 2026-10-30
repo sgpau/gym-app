@@ -51,10 +51,17 @@ export interface Workout {
   entries: WorkoutEntry[]
 }
 
+/** Rutinas de la semana en orden, sin día fijo. Una sola fila con id 'week'. */
+export interface WeeklyPlan {
+  id: 'week'
+  routineIds: string[]
+}
+
 export class GymDatabase extends Dexie {
   exercises!: EntityTable<Exercise, 'id'>
   routines!: EntityTable<Routine, 'id'>
   workouts!: EntityTable<Workout, 'id'>
+  plan!: EntityTable<WeeklyPlan, 'id'>
 
   constructor(name = 'gym') {
     super(name)
@@ -63,6 +70,7 @@ export class GymDatabase extends Dexie {
       routines: 'id, createdAt',
       workouts: 'id, date, routineId',
     })
+    this.version(2).stores({ plan: 'id' })
   }
 }
 

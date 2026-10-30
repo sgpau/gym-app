@@ -10,6 +10,9 @@ export const CalendarIcon = (p: P) => (
 export const ListIcon = (p: P) => (
   <svg {...base(p)}><rect x="4" y="3" width="16" height="18" rx="3" /><path d="M8 8h8M8 12h8M8 16h5" /></svg>
 )
+export const FlameIcon = (p: P) => (
+  <svg {...base(p)}><path d="M12 21.5c-4 0-7-2.8-7-6.8 0-3.5 2.4-5.6 4-8.2.6 1.6 1.4 2.6 2.4 3.2C11.6 6.5 13 4 15.5 2.5c-.4 3 .9 4.9 2.1 6.7 1 1.5 1.4 3 1.4 4.9 0 4.4-3 7.4-7 7.4z" /></svg>
+)
 export const DumbbellIcon = (p: P) => (
   <svg {...base(p)}><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11" /></svg>
 )

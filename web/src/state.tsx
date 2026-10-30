@@ -112,6 +112,8 @@ export interface Data {
   exercises: Exercise[]
   routines: Routine[]
   workouts: Workout[]
+  /** Rutinas del plan semanal en orden (solo las que existen). */
+  plan: string[]
   exerciseMap: Map<string, Exercise>
   loaded: boolean
 }
@@ -124,16 +126,19 @@ export function DataProvider({ children }: { children: ReactNode }) {
   const exercises = useLiveQuery(() => db.exercises.toArray(), [])
   const routines = useLiveQuery(() => db.routines.orderBy('createdAt').toArray(), [])
   const workouts = useLiveQuery(() => db.workouts.orderBy('date').toArray(), [])
+  const plan = useLiveQuery(() => db.plan.get('week'), [])
   const value = useMemo(() => {
     const sortedExercises = [...(exercises ?? [])].sort((a, b) => a.name.localeCompare(b.name, locale))
+    const routineIds = new Set((routines ?? []).map((r) => r.id))
     return {
       exercises: sortedExercises,
       routines: routines ?? [],
       workouts: workouts ?? [],
+      plan: (plan?.routineIds ?? []).filter((id) => routineIds.has(id)),
       exerciseMap: new Map(sortedExercises.map((e) => [e.id, e])),
       loaded: exercises !== undefined && routines !== undefined && workouts !== undefined,
     }
-  }, [exercises, routines, workouts, locale])
+  }, [exercises, routines, workouts, plan, locale])
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>
 }
 

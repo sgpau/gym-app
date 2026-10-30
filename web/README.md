@@ -2,6 +2,7 @@
 
 La misma app de rutinas que la versión Swift, pero como **app web instalable**. Se publica sola en GitHub Pages con cada `git push`, y en el iPhone se instala desde Safari, sin Xcode, sin Mac y sin cuenta de Apple. No caduca.
 
+- **Hoy**: plan semanal con las rutinas en orden, sin día fijo. Al abrir la app sale el siguiente entreno pendiente; al terminarlo, al día siguiente toca el siguiente. Cada lunes vuelve a empezar.
 - **Calendario**: los días con entreno llevan un punto. Desde ahí se registra el entreno, por rutina o libre.
 - **Registro**: series de repeticiones + kg, o de tiempo con cronómetro. Muestra lo que hiciste la última vez.
 - **Resumen al finalizar**: comparación con el entreno anterior (▲/▼, %) y récords personales 🏆.
