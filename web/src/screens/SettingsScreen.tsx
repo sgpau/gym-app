@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { parseBackup, serializeBackup, shiftDates, type GymBackup } from '../core/backup'
 import { deleteWorkoutsAndRoutines, exportBackup, importBackup } from '../db/importer'
+import { seedDefaults } from '../db/seed'
 import type { Key } from '../i18n'
 import { ACCENTS, db, useApp, useData, type Accent, type Appearance, type LangSetting } from '../state'
 import { useDialogs } from '../ui/dialogs'
 import { CheckIcon, ShareIcon } from '../ui/icons'
-import { BarButton, Row, Screen, Section, Segmented } from '../ui/kit'
-import { useSheet } from '../ui/nav'
+import { Row, Screen, Section, Segmented } from '../ui/kit'
 
 const VERSION = '1.0'
 const colorKey = (a: Accent) => `color${a[0].toUpperCase()}${a.slice(1)}` as Key
@@ -14,7 +14,6 @@ const colorKey = (a: Accent) => `color${a[0].toUpperCase()}${a.slice(1)}` as Key
 export function SettingsScreen() {
   const app = useApp()
   const { t, settings, update, isDark } = app
-  const sheet = useSheet()
   const dialogs = useDialogs()
   const { workouts } = useData()
   const [taps, setTaps] = useState(0)
@@ -70,6 +69,16 @@ export function SettingsScreen() {
     }
   }
 
+  const restoreDefaults = async () => {
+    try {
+      const r = await seedDefaults(db, app.lang)
+      if (r.exercisesCreated || r.routinesCreated) dialogs.alert(t('ready'), t('defaultsRestored', { e: r.exercisesCreated, r: r.routinesCreated }))
+      else dialogs.alert(t('ready'), t('defaultsAlreadyThere'))
+    } catch (error) {
+      dialogs.alert(t('error'), String(error))
+    }
+  }
+
   const exportFile = async () => {
     const backup = await exportBackup(db)
     const name = `gym-${new Date().toISOString().slice(0, 10)}.json`
@@ -90,8 +99,7 @@ export function SettingsScreen() {
   }
 
   return (
-    <Screen title={t('settings')} trailing={<BarButton bold onClick={sheet.dismiss}>{t('ok')}</BarButton>}>
-      <div style={{ height: 16 }} />
+    <Screen title={t('settings')} large>
       {!standalone && (
         <Section>
           <Row leading={<ShareIcon width={24} height={24} className="accent" />} title={<strong>{t('installTitle')}</strong>} subtitle={t('installBody')} />
@@ -142,6 +150,7 @@ export function SettingsScreen() {
         {persisted !== undefined && <Row title={t('storage')} value={t(persisted ? 'storagePersistent' : 'storageEvictable')} />}
         <Row className="action" title={t('exportBackup')} onClick={exportFile} />
         <Row className="action" title={t('importFile')} onClick={() => fileInput.current?.click()} />
+        <Row className="action" title={t('restoreDefaults')} onClick={restoreDefaults} />
       </Section>
       <input
         ref={fileInput}

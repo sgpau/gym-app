@@ -7,7 +7,7 @@ import { makeWorkout, workoutDate } from './factory'
 import { exerciseLogs, previousWorkoutOfRoutine, workoutComparison } from './history'
 import { deleteWorkoutsAndRoutines, exportBackup, importBackup } from './importer'
 import { GymDatabase, type Exercise } from './model'
-import { localizedName, seedIfEmpty } from './seed'
+import { localizedName, seedDefaults, seedIfEmpty } from './seed'
 
 const sample = readFileSync(new URL('../../public/sample-data.json', import.meta.url), 'utf8')
 let db: GymDatabase
@@ -44,7 +44,7 @@ describe('formato de importación', () => {
   it('el archivo de datos de prueba es válido', () => {
     const backup = parseBackup(sample)
     expect(backup.workouts.length).toBeGreaterThan(100)
-    expect(backup.routines.map((r) => r.name)).toEqual(['Empuje', 'Tirón', 'Pierna', 'Cardio y core'])
+    expect(backup.routines.map((r) => r.name)).toEqual(['Tren superior 1', 'Tren inferior 1', 'Tren superior 2', 'Tren inferior 2'])
   })
   it('las fechas se exportan sin milisegundos (compatible con la app Swift)', () => {
     const text = serializeBackup({ version: 1, exercises: [], routines: [], workouts: [{ date: new Date('2026-03-14T18:30:00.123Z'), exercises: [] }] })
@@ -53,28 +53,52 @@ describe('formato de importación', () => {
 })
 
 describe('base de datos', () => {
-  it('crea los ejercicios iniciales una sola vez y en el idioma activo', async () => {
+  it('crea los ejercicios, rutinas y plan por defecto una sola vez y en el idioma activo', async () => {
     expect(await seedIfEmpty(db, 'ca')).toBe(true)
     expect(await seedIfEmpty(db, 'ca')).toBe(false)
     const names = (await db.exercises.toArray()).map((e) => e.name)
-    expect(names).toContain('Esquat')
-    expect(names).toHaveLength(33)
+    expect(names).toContain('Esquat búlgar')
+    expect(names).toHaveLength(20)
+    const exercises = new Map((await db.exercises.toArray()).map((e) => [e.id, e.name]))
+    const routines = await db.routines.toArray()
+    expect(routines).toHaveLength(4)
+    const lower2 = routines.find((r) => r.name === 'Tren inferior 2')!
+    expect(lower2.items.map((i) => exercises.get(i.exerciseId))).toEqual(['Pes mort romanès', 'Esquat búlgar', 'Abducció', 'Adducció', 'Curl femoral'])
+    const byId = new Map(routines.map((r) => [r.id, r.name]))
+    expect((await db.plan.get('week'))!.routineIds.map((id) => byId.get(id))).toEqual(['Tren superior 1', 'Tren inferior 1', 'Tren superior 2', 'Tren inferior 2'])
+  })
+
+  it('restaurar los datos por defecto solo crea lo que falta', async () => {
+    await seedIfEmpty(db, 'es')
+    const upper1 = (await db.routines.toArray()).find((r) => r.name === 'Tren superior 1')!
+    await db.routines.delete(upper1.id)
+    await db.plan.put({ id: 'week', routineIds: [] })
+    const curl = (await db.exercises.toArray()).find((e) => e.name === 'Curl de bíceps')!
+    await db.exercises.delete(curl.id)
+    expect(await seedDefaults(db, 'es')).toEqual({ exercisesCreated: 1, routinesCreated: 1 })
+    expect(await db.exercises.count()).toBe(20)
+    expect(await db.routines.count()).toBe(4)
+    expect((await db.plan.get('week'))!.routineIds).toHaveLength(4)
+    // En otro idioma reconoce los nombres en castellano y no duplica nada.
+    expect(await seedDefaults(db, 'ca')).toEqual({ exercisesCreated: 0, routinesCreated: 0 })
   })
 
   it('importa los datos de prueba reutilizando los ejercicios existentes', async () => {
     await seedIfEmpty(db, 'es')
     const result = await importBackup(db, parseBackup(sample), 'es')
     expect(result.exercisesCreated).toBe(0)
-    expect(result.routinesCreated).toBe(4)
+    expect(result.routinesCreated).toBe(0)
     expect(result.workoutsImported).toBeGreaterThan(100)
-    expect(await db.exercises.count()).toBe(33)
+    expect(await db.exercises.count()).toBe(20)
+    expect(await db.routines.count()).toBe(4)
   })
 
   it('al importar en catalán traduce los nombres conocidos', async () => {
     await seedIfEmpty(db, 'ca')
     await importBackup(db, parseBackup(sample), 'ca')
-    expect((await db.routines.toArray()).map((r) => r.name).sort()).toEqual(['Cama', 'Cardio i core', 'Empenta', 'Estirada'])
-    expect(await db.exercises.count()).toBe(33)
+    expect(await db.routines.count()).toBe(4)
+    expect(await db.exercises.count()).toBe(20)
+    expect(localizedName('Sentadilla búlgara', 'ca')).toBe('Esquat búlgar')
     expect(localizedName('Sentadilla', 'ca')).toBe('Esquat')
     expect(localizedName('Mi ejercicio', 'ca')).toBe('Mi ejercicio')
   })
@@ -101,14 +125,14 @@ describe('base de datos', () => {
     await seedIfEmpty(db, 'es')
     await importBackup(db, parseBackup(sample), 'es')
     const byName = new Map((await db.routines.toArray()).map((r) => [r.name, r.id]))
-    await db.plan.put({ id: 'week', routineIds: [byName.get('Pierna')!, byName.get('Empuje')!] })
+    await db.plan.put({ id: 'week', routineIds: [byName.get('Tren inferior 2')!, byName.get('Tren superior 1')!] })
     const text = serializeBackup(await exportBackup(db))
-    expect(parseBackup(text).weeklyPlan).toEqual(['Pierna', 'Empuje'])
+    expect(parseBackup(text).weeklyPlan).toEqual(['Tren inferior 2', 'Tren superior 1'])
 
     const other = new GymDatabase(`test-${counter++}`)
     await importBackup(other, parseBackup(text), 'es')
     const names = new Map((await other.routines.toArray()).map((r) => [r.id, r.name]))
-    expect((await other.plan.get('week'))!.routineIds.map((id) => names.get(id))).toEqual(['Pierna', 'Empuje'])
+    expect((await other.plan.get('week'))!.routineIds.map((id) => names.get(id))).toEqual(['Tren inferior 2', 'Tren superior 1'])
 
     await deleteWorkoutsAndRoutines(other)
     expect(await other.plan.count()).toBe(0)
@@ -119,7 +143,7 @@ describe('base de datos', () => {
     await importBackup(db, parseBackup(sample), 'es')
     const workouts = await db.workouts.toArray()
     const exercises = await exerciseMap()
-    const routine = (await db.routines.toArray()).find((r) => r.name === 'Empuje')!
+    const routine = (await db.routines.toArray()).find((r) => r.name === 'Tren superior 1')!
     const last = workouts.filter((w) => w.routineId === routine.id).sort((a, b) => b.date - a.date)[0]
     const previous = previousWorkoutOfRoutine(last, workouts)!
     expect(previous.date).toBeLessThan(last.date)
@@ -133,14 +157,15 @@ describe('base de datos', () => {
     await importBackup(db, parseBackup(sample), 'es')
     const workouts = await db.workouts.toArray()
     const exercises = await exerciseMap()
-    const routine = (await db.routines.toArray()).find((r) => r.name === 'Empuje')!
+    const routine = (await db.routines.toArray()).find((r) => r.name === 'Tren superior 1')!
     const bench = [...exercises.values()].find((e) => e.name === 'Press de banca')!
     const workout = makeWorkout(routine, new Date(2030, 0, 1), workouts, exercises)
     expect(workout.entries).toHaveLength(routine.items.length)
     const benchEntry = workout.entries.find((e) => e.exerciseId === bench.id)!
     const lastBench = exerciseLogs(bench.id, workouts, exercises).at(-1)!
-    expect(benchEntry.sets).toHaveLength(4)
-    expect(benchEntry.sets[0].reps).toBe(8)
+    // La rutina por defecto ya existía: manda su objetivo (3 × 10), no el de los datos de prueba.
+    expect(benchEntry.sets).toHaveLength(3)
+    expect(benchEntry.sets[0].reps).toBe(10)
     expect(benchEntry.sets[0].weight).toBe(Math.max(...lastBench.sets.map((s) => s.weight)))
   })
 

@@ -3,13 +3,14 @@ import { CalendarScreen } from './screens/CalendarScreen'
 import { ExerciseListScreen } from './screens/ExerciseScreens'
 import { ProgressListScreen } from './screens/ProgressScreens'
 import { RoutineListScreen } from './screens/RoutineScreens'
+import { SettingsScreen } from './screens/SettingsScreen'
 import { TodayScreen } from './screens/TodayScreen'
 import { AppProvider, DataProvider, useApp } from './state'
 import { DialogHost } from './ui/dialogs'
-import { CalendarIcon, ChartIcon, DumbbellIcon, FlameIcon, ListIcon } from './ui/icons'
+import { CalendarIcon, ChartIcon, DumbbellIcon, FlameIcon, GearIcon, ListIcon } from './ui/icons'
 import { SheetHost, Stack } from './ui/nav'
 
-type Tab = 'today' | 'calendar' | 'routines' | 'exercises' | 'progress'
+type Tab = 'today' | 'calendar' | 'routines' | 'exercises' | 'progress' | 'settings'
 
 export function App() {
   return (
@@ -34,6 +35,7 @@ function Shell() {
     { id: 'routines', label: t('tabRoutines'), icon: <ListIcon />, root: <RoutineListScreen /> },
     { id: 'exercises', label: t('tabExercises'), icon: <DumbbellIcon />, root: <ExerciseListScreen /> },
     { id: 'progress', label: t('tabProgress'), icon: <ChartIcon />, root: <ProgressListScreen /> },
+    { id: 'settings', label: t('settings'), icon: <GearIcon />, root: <SettingsScreen /> },
   ]
   return (
     <div className="app">

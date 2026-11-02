@@ -23,30 +23,35 @@ async function run(name, { colorScheme = 'light', locale = 'es-ES' } = {}) {
   await page.waitForTimeout(300)
   await shot('01-calendar-empty')
 
-  // Ajustes → 7 toques en Versión → cargar datos de prueba
-  await tap('button[aria-label="Ajustes"], button[aria-label="Configuració"]')
-  await page.waitForTimeout(500)
-  const version = page.locator('.sheet button.row', { hasText: /Versi/ })
+  // Pestaña Ajustes → restaurar por defecto (ya está todo) → 7 toques en Versión → cargar datos de prueba
+  await page.locator('.tab').nth(5).click()
+  await page.waitForTimeout(400)
+  await shot('02-settings')
+  await page.locator('button.row:visible', { hasText: /Restaurar/ }).click()
+  await page.waitForSelector('.alert-box')
+  await shot('02b-defaults-already-there')
+  await page.locator('.alert-box button').click()
+  const version = page.locator('button.row:visible', { hasText: /Versi/ })
   for (let i = 0; i < 7; i++) await version.click()
-  await shot('02-settings-dev')
-  await page.locator('.sheet button.row', { hasText: /prueba|prova/ }).click()
+  await shot('02c-settings-dev')
+  await page.locator('button.row:visible', { hasText: /prueba|prova/ }).click()
   await page.waitForSelector('.alert-box', { timeout: 10000 })
   await shot('03-imported')
   await page.locator('.alert-box button').click()
-  await page.locator('.sheet .bar-button', { hasText: /OK|D’acord/ }).click()
+  await page.locator('.tab').nth(1).click()
   await page.waitForTimeout(600)
   await shot('04-calendar-data')
 
-  // Registrar un entreno de la rutina Empuje/Empenta hoy, subir el peso del press y finalizar
+  // Registrar un entreno de la rutina Tren superior 1 hoy, subir el peso del press y finalizar
   await tap('.primary-button')
   await page.waitForTimeout(500)
-  await page.locator('.sheet button.row', { hasText: /Empuje|Empenta/ }).click()
+  await page.locator('.sheet button.row', { hasText: /Tren superior 1/ }).click()
   await page.waitForTimeout(600)
   await shot('05-editor')
   const weight = page.locator('.sheet input[inputmode="decimal"]')
   const current = await weight.first().inputValue()
   const heavier = String(parseFloat(current.replace(',', '.')) + 5).replace('.', ',')
-  for (let i = 0; i < 4; i++) { await weight.nth(i).fill(heavier) }
+  for (let i = 0; i < 3; i++) { await weight.nth(i).fill(heavier) }
   await page.locator('.sheet .bar-button.prominent').click()
   await page.waitForTimeout(800)
   await shot('06-summary')
@@ -71,6 +76,11 @@ async function run(name, { colorScheme = 'light', locale = 'es-ES' } = {}) {
   await page.locator('.tab').nth(3).click()
   await page.waitForTimeout(300)
   await shot('11-exercises')
+
+  // La barra con 6 pestañas en una pantalla estrecha (iPhone SE)
+  await page.setViewportSize({ width: 320, height: 568 })
+  await page.waitForTimeout(300)
+  await shot('12-tabbar-320')
   await context.close()
 }
 

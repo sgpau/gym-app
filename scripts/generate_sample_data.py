@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-"""Genera GymApp/Resources/sample-data.json: un año de entrenos ficticios pero realistas.
+"""Genera web/public/sample-data.json (datos de prueba de la PWA): un año de entrenos ficticios pero realistas.
 
-- Semana tipo: lunes Empuje, miércoles Tirón, viernes Pierna y algunos sábados Cardio y core.
+- Usa las rutinas y ejercicios por defecto: lunes Tren superior 1, martes Tren inferior 1,
+  jueves Tren superior 2 y viernes Tren inferior 2.
 - Progresión gradual de cargas (más rápida al principio), con ruido, semanas de descarga
   cada 8 semanas, entrenos sueltos que se saltan, una gripe en enero y vacaciones en agosto.
 - La última serie a veces sale con una repetición menos, como en la vida real.
@@ -17,30 +18,31 @@ import random
 from datetime import date, datetime, time, timedelta, timezone
 from pathlib import Path
 
-OUTPUT = Path(__file__).resolve().parent.parent / "GymApp" / "Resources" / "sample-data.json"
+# GymApp/Resources/sample-data.json (app Swift) se queda con las rutinas antiguas y ya no se regenera.
+OUTPUT = Path(__file__).resolve().parent.parent / "web" / "public" / "sample-data.json"
 
-# nombre, grupo muscular, tipo
+# nombre, grupo muscular, tipo (los mismos que los ejercicios por defecto de la PWA, web/src/db/seed.ts)
 EXERCISES = [
     ("Press de banca", "chest", "reps"),
-    ("Press inclinado con mancuernas", "chest", "reps"),
-    ("Fondos en paralelas", "chest", "reps"),
+    ("Remo neutro", "back", "reps"),
     ("Press militar", "shoulders", "reps"),
-    ("Elevaciones laterales", "shoulders", "reps"),
-    ("Extensión de tríceps en polea", "triceps", "reps"),
-    ("Dominadas", "back", "reps"),
-    ("Remo con barra", "back", "reps"),
+    ("Curl de bíceps", "biceps", "reps"),
+    ("Extensión de tríceps", "triceps", "reps"),
+    ("Hip thrust", "glutes", "reps"),
+    ("Sentadilla en multipower", "legs", "reps"),
+    ("Zancadas en multipower", "legs", "reps"),
+    ("Extensión de cuádriceps", "legs", "reps"),
+    ("Elevación de talones", "legs", "reps"),
     ("Jalón al pecho", "back", "reps"),
+    ("Press inclinado", "chest", "reps"),
+    ("Remo abierto", "back", "reps"),
     ("Face pull", "shoulders", "reps"),
-    ("Curl con barra", "biceps", "reps"),
-    ("Sentadilla", "legs", "reps"),
+    ("Elevaciones laterales", "shoulders", "reps"),
     ("Peso muerto rumano", "glutes", "reps"),
-    ("Prensa de piernas", "legs", "reps"),
+    ("Sentadilla búlgara", "legs", "reps"),
+    ("Abducción", "glutes", "reps"),
+    ("Aducción", "legs", "reps"),
     ("Curl femoral", "legs", "reps"),
-    ("Elevación de gemelos", "legs", "reps"),
-    ("Plancha", "core", "time"),
-    ("Plancha lateral", "core", "time"),
-    ("Crunch abdominal", "core", "reps"),
-    ("Cinta de correr", "cardio", "time"),
 ]
 
 # Cada ejercicio de rutina: series, reps objetivo, y cómo evoluciona.
@@ -48,38 +50,37 @@ EXERCISES = [
 #   kind "bodyweight": reps de start a end, sin peso
 #   kind "time": segundos de start a end, redondeados a `step`
 ROUTINES = {
-    "Empuje": [
+    "Tren superior 1": [
         dict(exercise="Press de banca", sets=4, reps=8, kind="weight", start=55, end=75, step=2.5),
-        dict(exercise="Press inclinado con mancuernas", sets=3, reps=10, kind="weight", start=18, end=26, step=2),
+        dict(exercise="Remo neutro", sets=3, reps=10, kind="weight", start=45, end=62.5, step=2.5),
         dict(exercise="Press militar", sets=3, reps=8, kind="weight", start=32.5, end=45, step=2.5),
-        dict(exercise="Elevaciones laterales", sets=3, reps=12, kind="weight", start=7, end=11, step=1),
-        dict(exercise="Extensión de tríceps en polea", sets=3, reps=12, kind="weight", start=20, end=30, step=2.5),
-        dict(exercise="Fondos en paralelas", sets=3, reps=8, kind="bodyweight", start=7, end=14),
+        dict(exercise="Curl de bíceps", sets=3, reps=10, kind="weight", start=10, end=16, step=1),
+        dict(exercise="Extensión de tríceps", sets=3, reps=12, kind="weight", start=20, end=30, step=2.5),
     ],
-    "Tirón": [
-        dict(exercise="Dominadas", sets=4, reps=6, kind="bodyweight", start=4, end=10),
-        dict(exercise="Remo con barra", sets=4, reps=8, kind="weight", start=50, end=67.5, step=2.5),
-        dict(exercise="Jalón al pecho", sets=3, reps=10, kind="weight", start=45, end=62.5, step=2.5),
+    "Tren inferior 1": [
+        dict(exercise="Hip thrust", sets=4, reps=10, kind="weight", start=80, end=130, step=5),
+        dict(exercise="Sentadilla en multipower", sets=4, reps=8, kind="weight", start=60, end=95, step=2.5),
+        dict(exercise="Zancadas en multipower", sets=3, reps=10, kind="weight", start=30, end=50, step=2.5),
+        dict(exercise="Extensión de cuádriceps", sets=3, reps=12, kind="weight", start=35, end=55, step=2.5),
+        dict(exercise="Elevación de talones", sets=4, reps=15, kind="weight", start=40, end=70, step=5),
+    ],
+    "Tren superior 2": [
+        dict(exercise="Jalón al pecho", sets=4, reps=10, kind="weight", start=45, end=62.5, step=2.5),
+        dict(exercise="Press inclinado", sets=3, reps=10, kind="weight", start=18, end=26, step=2),
+        dict(exercise="Remo abierto", sets=3, reps=10, kind="weight", start=40, end=55, step=2.5),
         dict(exercise="Face pull", sets=3, reps=15, kind="weight", start=15, end=22.5, step=2.5),
-        dict(exercise="Curl con barra", sets=3, reps=10, kind="weight", start=25, end=35, step=2.5),
+        dict(exercise="Elevaciones laterales", sets=3, reps=12, kind="weight", start=7, end=11, step=1),
     ],
-    "Pierna": [
-        dict(exercise="Sentadilla", sets=4, reps=6, kind="weight", start=70, end=102.5, step=2.5),
-        dict(exercise="Peso muerto rumano", sets=3, reps=8, kind="weight", start=60, end=90, step=2.5),
-        dict(exercise="Prensa de piernas", sets=3, reps=10, kind="weight", start=120, end=180, step=5),
+    "Tren inferior 2": [
+        dict(exercise="Peso muerto rumano", sets=4, reps=8, kind="weight", start=60, end=90, step=2.5),
+        dict(exercise="Sentadilla búlgara", sets=3, reps=10, kind="weight", start=12, end=22, step=2),
+        dict(exercise="Abducción", sets=3, reps=15, kind="weight", start=40, end=60, step=5),
+        dict(exercise="Aducción", sets=3, reps=15, kind="weight", start=35, end=55, step=5),
         dict(exercise="Curl femoral", sets=3, reps=12, kind="weight", start=35, end=50, step=2.5),
-        dict(exercise="Elevación de gemelos", sets=4, reps=15, kind="weight", start=50, end=75, step=5),
-        dict(exercise="Plancha", sets=3, reps=None, kind="time", start=45, end=100, step=5),
-    ],
-    "Cardio y core": [
-        dict(exercise="Cinta de correr", sets=1, reps=None, kind="time", start=20 * 60, end=32 * 60, step=60),
-        dict(exercise="Plancha", sets=3, reps=None, kind="time", start=45, end=100, step=5),
-        dict(exercise="Plancha lateral", sets=2, reps=None, kind="time", start=30, end=60, step=5),
-        dict(exercise="Crunch abdominal", sets=3, reps=15, kind="bodyweight", start=15, end=25),
     ],
 }
 
-WEEKLY = {0: "Empuje", 2: "Tirón", 4: "Pierna", 5: "Cardio y core"}  # lunes=0
+WEEKLY = {0: "Tren superior 1", 1: "Tren inferior 1", 3: "Tren superior 2", 4: "Tren inferior 2"}  # lunes=0
 
 
 def round_to(value, step):
@@ -112,7 +113,7 @@ def generate(end: date, seed: int):
         routine = WEEKLY.get(day.weekday())
         week = (day - start).days // 7
         if routine and not is_off(day):
-            skip = 0.5 if routine == "Cardio y core" else 0.08
+            skip = 0.08
             if rng.random() >= skip:
                 workouts.append(make_workout(rng, day, routine, (day - start).days / total_days, week))
         day += timedelta(days=1)
@@ -180,14 +181,11 @@ def main():
     }
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    web_copy = OUTPUT.parent.parent.parent / "web" / "public" / "sample-data.json"
     # Un entreno por línea: legible y sin inflar el tamaño.
     lines = ",\n    ".join(json.dumps(w, ensure_ascii=False, separators=(",", ":")) for w in backup["workouts"])
     header = json.dumps({k: v for k, v in backup.items() if k != "workouts"}, ensure_ascii=False, indent=2)
     text = header[:-2] + ',\n  "workouts": [\n    ' + lines + "\n  ]\n}\n"
     args.output.write_text(text, encoding="utf-8")
-    if args.output == OUTPUT and web_copy.parent.exists():
-        web_copy.write_text(text, encoding="utf-8")  # la PWA usa el mismo archivo
 
     sets = sum(len(e["sets"]) for w in backup["workouts"] for e in w["exercises"])
     print(f"{args.output}: {len(backup['workouts'])} entrenos, {sets} series, "

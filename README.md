@@ -38,10 +38,10 @@ En **Calendario → ⚙︎ Ajustes**, toca **7 veces** la fila «Versión». Apa
 
 Si ya tienes entrenos, te pregunta si **reemplazar** o **añadir**.
 
-Para regenerar el archivo de prueba (otra semilla u otra fecha final):
+El generador ya produce los datos de prueba de la PWA (`web/public/sample-data.json`, con sus 4 rutinas por defecto). El archivo de la app Swift se queda como está. Para regenerarlo (otra semilla u otra fecha final):
 
 ```sh
-python3 scripts/generate_sample_data.py --end 2026-10-09 --seed 7
+python3 scripts/generate_sample_data.py --end 2026-11-01 --seed 7
 ```
 
 ### Formato del JSON

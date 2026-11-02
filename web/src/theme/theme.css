@@ -201,6 +201,8 @@ input, textarea, select {
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
   color: var(--label-2); font-size: 10px; font-weight: 500;
 }
+.tab { min-width: 0; }
+.tab span { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .tab svg { width: 26px; height: 26px; }
 .tab[aria-selected='true'] { color: var(--accent); }
 

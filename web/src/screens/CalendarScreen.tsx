@@ -6,10 +6,9 @@ import type { Workout } from '../db/model'
 import { db, useApp, useData } from '../state'
 import { dayTitle, monthTitle } from '../ui/dates'
 import { useDialogs } from '../ui/dialogs'
-import { ChevronLeft, ChevronRight, EllipsisIcon, GearIcon, PlusIcon } from '../ui/icons'
-import { BarButton, Screen } from '../ui/kit'
+import { ChevronLeft, ChevronRight, EllipsisIcon, PlusIcon } from '../ui/icons'
+import { Screen } from '../ui/kit'
 import { useSheet } from '../ui/nav'
-import { SettingsScreen } from './SettingsScreen'
 import { WorkoutFlow, WorkoutSummaryScreen } from './WorkoutScreens'
 
 export function CalendarScreen() {
@@ -25,7 +24,6 @@ export function CalendarScreen() {
     <Screen
       title={t('tabCalendar')}
       large
-      trailing={<BarButton label={t('settings')} onClick={() => sheet.present(<SettingsScreen />)}><GearIcon width={22} height={22} /></BarButton>}
     >
       <MonthCalendar selected={selected} onSelect={setSelected} workoutDays={days} />
       <div style={{ padding: '24px 16px 0', display: 'grid', gap: 12 }}>
