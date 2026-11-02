@@ -1,7 +1,7 @@
 // Textos de pesos, tiempos y series (port de GymApp/Core/Formatters.swift).
 import type { I18n } from '../i18n'
 import { deltaChange, type Delta } from './comparison'
-import type { ProgressMetric, SetRecord } from './stats'
+import type { ExerciseLog, ProgressMetric, SetRecord } from './stats'
 
 export function formatNumber(value: number, i: I18n, fractionDigits = 2): string {
   return new Intl.NumberFormat(i.locale, { maximumFractionDigits: fractionDigits }).format(value)
@@ -35,6 +35,15 @@ export function formatSetSummary(sets: SetRecord[], i: I18n): string {
   const counts = new Set(values).size === 1 ? `${sets.length}×${values[0]}` : values.join(', ')
   const maxWeight = Math.max(0, ...sets.map((s) => s.weight))
   return maxWeight > 0 ? `${counts} · ${formatWeight(maxWeight, i)}` : counts
+}
+
+/**
+ * Entreno como texto para pegar en Strava u otra app: una cabecera y una línea por ejercicio con cada serie.
+ * "Press de banca: 60 kg × 8, 60 kg × 8, 62,5 kg × 6"
+ */
+export function formatWorkoutText(header: string, logs: ExerciseLog[], i: I18n): string {
+  const lines = logs.filter((l) => l.sets.length > 0).map((l) => `${l.name}: ${l.sets.map((s) => formatSet(s, i)).join(', ')}`)
+  return [header, ...lines].join('\n')
 }
 
 export function formatMetricValue(value: number, metric: ProgressMetric, i: I18n): string {

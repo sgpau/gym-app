@@ -6,7 +6,7 @@ La misma app de rutinas que la versión Swift, pero como **app web instalable**.
 - **Hoy**: plan semanal con las rutinas en orden, sin día fijo. Al abrir la app sale el siguiente entreno pendiente; al terminarlo, al día siguiente toca el siguiente. Cada lunes vuelve a empezar.
 - **Calendario**: los días con entreno llevan un punto. Desde ahí se registra el entreno, por rutina o libre.
 - **Registro**: series de repeticiones + kg, o de tiempo con cronómetro. Las repeticiones se anotan al hacer cada serie y pueden ser distintas en cada una; en gris sale lo que hiciste esa misma serie la última vez.
-- **Resumen al finalizar**: comparación con el entreno anterior (▲/▼, %) y récords personales 🏆.
+- **Resumen al finalizar**: comparación con el entreno anterior (▲/▼, %) y récords personales 🏆. El botón **Copiar entreno** copia las series, repeticiones y pesos para pegarlos, por ejemplo, en la descripción de la actividad de Strava.
 - **Progreso**: gráfica por ejercicio y periodo, récords e historial.
 - **Ajustes** (pestaña propia): modo Sistema / Claro / Oscuro, 9 colores, castellano o catalán, y **exportar o importar una copia de seguridad (JSON)**.
 - **Menú oculto**: toca 7 veces «Versión» en Ajustes. Sirve para cargar un año de datos de prueba o borrar los entrenos y rutinas.

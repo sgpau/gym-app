@@ -7,7 +7,7 @@ const errors = []
 
 async function run(name, { colorScheme = 'light', locale = 'es-ES' } = {}) {
   const context = await browser.newContext({
-    viewport: { width: 393, height: 852 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true, colorScheme, locale,
+    viewport: { width: 393, height: 852 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true, colorScheme, locale, permissions: ['clipboard-read', 'clipboard-write'],
   })
   const page = await context.newPage()
   page.on('pageerror', (e) => errors.push(`${name}: ${e.message}`))
@@ -83,6 +83,13 @@ async function run(name, { colorScheme = 'light', locale = 'es-ES' } = {}) {
   await page.locator('.sheet .bar-button.prominent').click()
   await page.waitForTimeout(800)
   await shot('06-summary')
+  // Copiar entreno: series, reps y pesos al portapapeles (para pegar en Strava)
+  await page.locator('.sheet .primary-button:visible', { hasText: /Copiar/ }).click()
+  await page.waitForTimeout(200)
+  const copied = await page.evaluate(() => navigator.clipboard.readText())
+  if (!/^Tren superior 1 · .+\n.+: .+ × 10, .+ × 9/.test(copied)) errors.push(`${name}: texto copiado inesperado: ${copied}`)
+  if (!(await page.locator('.sheet .primary-button:visible', { hasText: /✓/ }).count())) errors.push(`${name}: el botón no muestra «Copiado»`)
+  await shot('06a-summary-copied')
   await page.locator('.sheet .screen').last().evaluate((el) => el.scrollTo(0, 900))
   await page.waitForTimeout(300)
   await shot('07-summary-scrolled')

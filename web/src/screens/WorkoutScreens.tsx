@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import type { Delta, ExerciseComparison } from '../core/comparison'
-import { formatDuration, formatMetricValue, formatSet, formatSetSummary, formatWeight } from '../core/format'
+import { formatDuration, formatMetricValue, formatSet, formatSetSummary, formatWeight, formatWorkoutText } from '../core/format'
 import type { ProgressMetric } from '../core/stats'
 import { makeEntry, makeWorkout, nextSet } from '../db/factory'
 import { lastLog, workoutComparison, workoutLogs } from '../db/history'
@@ -356,6 +356,8 @@ export function WorkoutSummaryScreen({ workoutId, onDone }: { workoutId: string;
           <div className="secondary" style={{ fontSize: 15, marginTop: 4 }}>{caption}</div>
         </header>
 
+        <CopyWorkoutButton text={formatWorkoutText(`${title} · ${dayTitle(date, app.locale)}`, workoutLogs(workout, exerciseMap), app)} />
+
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
           {(comparison.volume.current > 0 || (comparison.volume.previous ?? 0) > 0) && <TotalTile title={t('volume')} delta={comparison.volume} metric="volume" />}
           <TotalTile title={t('sets')} delta={comparison.sets} metric="totalReps" />
@@ -389,6 +391,33 @@ export function WorkoutSummaryScreen({ workoutId, onDone }: { workoutId: string;
         {comparison.exercises.map((e) => <ComparisonCard key={e.exerciseId} comparison={e} />)}
       </div>
     </Screen>
+  )
+}
+
+/** Copia las series, reps y pesos para pegarlos en Strava u otra app. */
+function CopyWorkoutButton({ text }: { text: string }) {
+  const { t } = useApp()
+  const dialogs = useDialogs()
+  const [copied, setCopied] = useState(false)
+  useEffect(() => {
+    if (!copied) return
+    const timer = setTimeout(() => setCopied(false), 2000)
+    return () => clearTimeout(timer)
+  }, [copied])
+
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(text)
+      setCopied(true)
+    } catch {
+      dialogs.alert(t('copyManually'), text)
+    }
+  }
+
+  return (
+    <button className="primary-button" onClick={() => void copy()} aria-live="polite">
+      {copied ? `✓ ${t('copied')}` : t('copyWorkout')}
+    </button>
   )
 }
 

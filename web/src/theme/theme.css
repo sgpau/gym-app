@@ -384,7 +384,7 @@ button.row:active { background: var(--fill-2); }
 @keyframes alert-in { from { opacity: 0; transform: translate(-50%, -50%) scale(1.1); } }
 .alert-box .alert-body { padding: 19px 16px; }
 .alert-box h3 { margin: 0 0 4px; font-size: 17px; }
-.alert-box p { margin: 0; font-size: 13px; }
+.alert-box p { margin: 0; font-size: 13px; white-space: pre-line; -webkit-user-select: text; user-select: text; }
 .alert-box button { width: 100%; min-height: 44px; color: var(--accent); font-weight: 600; border-top: 0.5px solid var(--separator); }
 
 /* Rueda de duración */

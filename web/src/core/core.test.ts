@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { close, day, es, ca, log } from '../test/helpers'
 import { compareExercise, compareWorkout, deltaPercent, newRecords, trendOf } from './comparison'
-import { formatChange, formatDuration, formatMetricValue, formatPercent, formatSet, formatSetSummary, formatWeight } from './format'
+import { formatChange, formatDuration, formatMetricValue, formatPercent, formatSet, formatSetSummary, formatWeight, formatWorkoutText } from './format'
 import { addMonths, monthGrid, weekdaySymbols } from './monthGrid'
 import {
   availableMetrics, bestSet, oneRepMaxOf, personalBests, progress, repsSet, summarize, timeSet, volumeOf,
@@ -172,5 +172,23 @@ describe('formatos', () => {
     expect(formatChange({ current: 8, previous: null }, 'totalReps', ca)).toBe('Nou')
     expect(formatPercent(0.0625)).toBe('+6 %')
     expect(formatPercent(-0.031)).toBe('−3 %')
+  })
+})
+
+describe('texto del entreno', () => {
+  it('una línea por ejercicio con cada serie', () => {
+    const d = day(2026, 11, 2)
+    const text = formatWorkoutText('Tren superior 1 · Lunes, 2 de noviembre', [
+      log('Press de banca', d, [repsSet(8, 60), repsSet(8, 60), repsSet(6, 62.5)]),
+      log('Dominadas', d, [repsSet(10), repsSet(8)]),
+      log('Plancha', d, [timeSet(60), timeSet(45, 10)], 'time'),
+      log('Vacío', d, []),
+    ], es)
+    expect(text).toBe([
+      'Tren superior 1 · Lunes, 2 de noviembre',
+      'Press de banca: 60 kg × 8, 60 kg × 8, 62,5 kg × 6',
+      'Dominadas: 10 reps, 8 reps',
+      'Plancha: 1:00, 0:45 · 10 kg',
+    ].join('\n'))
   })
 })
