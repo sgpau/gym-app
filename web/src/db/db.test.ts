@@ -152,7 +152,7 @@ describe('base de datos', () => {
     expect(comparison.exercises.length).toBe(last.entries.length)
   })
 
-  it('un entreno nuevo de una rutina sale relleno con objetivos y el peso de la última vez', async () => {
+  it('un entreno nuevo de una rutina trae las series y el peso de la última vez, sin repeticiones', async () => {
     await seedIfEmpty(db, 'es')
     await importBackup(db, parseBackup(sample), 'es')
     const workouts = await db.workouts.toArray()
@@ -163,9 +163,9 @@ describe('base de datos', () => {
     expect(workout.entries).toHaveLength(routine.items.length)
     const benchEntry = workout.entries.find((e) => e.exerciseId === bench.id)!
     const lastBench = exerciseLogs(bench.id, workouts, exercises).at(-1)!
-    // La rutina por defecto ya existía: manda su objetivo (3 × 10), no el de los datos de prueba.
+    // La rutina por defecto ya existía: manda su número de series (3), no el de los datos de prueba.
     expect(benchEntry.sets).toHaveLength(3)
-    expect(benchEntry.sets[0].reps).toBe(10)
+    expect(benchEntry.sets.map((s) => s.reps)).toEqual([null, null, null]) // se anotan al hacer cada serie
     expect(benchEntry.sets[0].weight).toBe(Math.max(...lastBench.sets.map((s) => s.weight)))
   })
 

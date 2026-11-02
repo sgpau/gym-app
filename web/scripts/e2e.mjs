@@ -52,6 +52,10 @@ async function run(name, { colorScheme = 'light', locale = 'es-ES' } = {}) {
   const current = await weight.first().inputValue()
   const heavier = String(parseFloat(current.replace(',', '.')) + 5).replace('.', ',')
   for (let i = 0; i < 3; i++) { await weight.nth(i).fill(heavier) }
+  // Las repeticiones se anotan serie a serie y pueden ser distintas
+  const reps = page.locator('.sheet input[inputmode="numeric"]')
+  for (let i = 0; i < await reps.count(); i++) await reps.nth(i).fill(String([10, 9, 8, 8][i % 4]))
+  await shot('05b-editor-reps')
   await page.locator('.sheet .bar-button.prominent').click()
   await page.waitForTimeout(800)
   await shot('06-summary')

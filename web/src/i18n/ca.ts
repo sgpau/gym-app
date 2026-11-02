@@ -180,6 +180,7 @@ export const ca: Record<keyof typeof es, Entry> = {
   deleteRoutineMessage: 'Els entrenaments que ja hi vas fer es conserven.',
   addExercises: 'Afegir exercicis',
   moveUp: 'Pujar',
+  reorder: 'Reordenar (arrossega, o fletxes del teclat)',
   moveDown: 'Baixar',
   searchExercise: 'Cercar exercici',
   byTime: 'per temps',

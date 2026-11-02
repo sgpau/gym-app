@@ -180,7 +180,7 @@ function TodayCard({ progress, shown, routineById, canChoose, onChoose, onStart,
           if (!exercise) return null
           const target = exercise.trackingType === 'time'
             ? t('targetReps', { sets: item.sets, reps: formatDuration(item.duration) })
-            : t('targetReps', { sets: item.sets, reps: item.reps })
+            : t('setsCount', { n: item.sets })
           return (
             <li key={index} style={{ display: 'flex', gap: 8 }}>
               <span className="truncate" style={{ flex: 1 }}>{exercise.name}</span>

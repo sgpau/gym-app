@@ -14,13 +14,14 @@ export function makeEntry(
   workout: Pick<Workout, 'date' | 'id'>,
   workouts: Workout[],
   exercises: ExerciseMap,
-  target: { sets?: number; reps?: number; duration?: number } = {},
+  target: { sets?: number; duration?: number } = {},
 ): WorkoutEntry {
   const last = lastLog(exercise.id, workouts, exercises, workout.date, workout.id)
   const lastWeight = last ? Math.max(0, ...last.sets.map((s) => s.weight)) : 0
   const lastBest = last?.sets.reduce((best, s) => (best === null || s.weight >= best.weight ? s : best), null as (typeof last.sets)[number] | null)
   const sets: WorkoutSet[] = Array.from({ length: Math.max(1, target.sets ?? 3) }, () => ({
-    reps: exercise.trackingType === 'reps' ? target.reps ?? (lastBest?.kind === 'reps' ? lastBest.reps : null) : null,
+    // Las repeticiones se anotan al hacer cada serie (la de la última vez sale como pista).
+    reps: null,
     duration: exercise.trackingType === 'time' ? target.duration ?? (lastBest?.kind === 'time' ? lastBest.duration : null) : null,
     weight: lastWeight > 0 ? lastWeight : null,
   }))

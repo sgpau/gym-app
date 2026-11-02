@@ -43,6 +43,7 @@ export const Circle = (p: P) => <svg viewBox="0 0 24 24" aria-hidden {...p}><cir
 export const EllipsisIcon = (p: P) => (
   <svg viewBox="0 0 24 24" aria-hidden {...p}><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth={1.8} /><circle cx="7.5" cy="12" r="1.4" fill="currentColor" /><circle cx="12" cy="12" r="1.4" fill="currentColor" /><circle cx="16.5" cy="12" r="1.4" fill="currentColor" /></svg>
 )
+export const GripIcon = (p: P) => <svg {...base(p)}><path d="M5 9h14M5 15h14" /></svg>
 export const ArrowUp = (p: P) => <svg {...base(p)}><path d="M12 19V5M6 11l6-6 6 6" /></svg>
 export const ArrowDown = (p: P) => <svg {...base(p)}><path d="M12 5v14M6 13l6 6 6-6" /></svg>
 export const TriangleUp = (p: P) => <svg viewBox="0 0 10 10" aria-hidden {...p}><path d="M5 1l4.5 8h-9z" fill="currentColor" /></svg>

@@ -211,6 +211,7 @@ function EntrySection({ entry, exercise, workout, workouts, onChange, onRemove }
             key={index}
             number={index + 1}
             set={set}
+            repsHint={last?.sets[index]?.kind === 'reps' ? last.sets[index].reps : null}
             timed={exercise.trackingType === 'time'}
             onChange={(s) => setAt(index, s)}
             onDelete={() => onChange({ ...entry, sets: entry.sets.filter((_, i) => i !== index) })}
@@ -222,8 +223,9 @@ function EntrySection({ entry, exercise, workout, workouts, onChange, onRemove }
   )
 }
 
-function SetRow({ number, set, timed, onChange, onDelete }: {
-  number: number; set: WorkoutSet; timed: boolean; onChange: (s: WorkoutSet) => void; onDelete: () => void
+function SetRow({ number, set, repsHint, timed, onChange, onDelete }: {
+  /** Repeticiones de esta misma serie la última vez, como pista en el campo vacío. */
+  number: number; set: WorkoutSet; repsHint: number | null; timed: boolean; onChange: (s: WorkoutSet) => void; onDelete: () => void
 }) {
   const { t } = useApp()
   return (
@@ -233,7 +235,7 @@ function SetRow({ number, set, timed, onChange, onDelete }: {
         <DurationControl value={set.duration} onChange={(duration) => onChange({ ...set, duration })} />
       ) : (
         <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-          <NumberField label={`${t('setNumber', { n: number })}, ${t('repsUnit')}`} placeholder="0" value={set.reps} onChange={(reps) => onChange({ ...set, reps })} width={56} />
+          <NumberField label={`${t('setNumber', { n: number })}, ${t('repsUnit')}`} placeholder={repsHint !== null ? String(repsHint) : '0'} value={set.reps} onChange={(reps) => onChange({ ...set, reps })} width={56} />
           <span className="unit">{t('repsUnit')}</span>
         </span>
       )}

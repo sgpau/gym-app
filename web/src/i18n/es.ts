@@ -193,6 +193,7 @@ export const es = {
   deleteRoutineMessage: 'Los entrenos que ya hiciste con ella se conservan.',
   addExercises: 'Añadir ejercicios',
   moveUp: 'Subir',
+  reorder: 'Reordenar (arrastra, o flechas del teclado)',
   moveDown: 'Bajar',
   searchExercise: 'Buscar ejercicio',
   byTime: 'por tiempo',
