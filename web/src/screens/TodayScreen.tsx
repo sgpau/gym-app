@@ -5,10 +5,10 @@ import { makeWorkout } from '../db/factory'
 import type { Routine } from '../db/model'
 import { db, useApp, useData } from '../state'
 import { shortDay } from '../ui/dates'
-import { useDialogs } from '../ui/dialogs'
-import { ArrowDown, ArrowUp, CheckCircle, Circle, ListIcon, PlayIcon, PlusIcon, TrashIcon } from '../ui/icons'
+import { CheckCircle, Circle, ListIcon, PlayIcon, PlusIcon, TrashIcon } from '../ui/icons'
 import { BarButton, Empty, Row, Screen, Section } from '../ui/kit'
 import { useNav, useSheet } from '../ui/nav'
+import { moveItem, SortableList } from '../ui/sortable'
 import { WorkoutFlow, WorkoutSummaryScreen } from './WorkoutScreens'
 
 /** La fecha actual, que se actualiza al volver a la app y cada minuto (para cambiar de día a medianoche). */
@@ -28,12 +28,10 @@ export function TodayScreen() {
   const { plan, routines, workouts, exerciseMap, loaded } = useData()
   const nav = useNav()
   const sheet = useSheet()
-  const dialogs = useDialogs()
   const now = useNow()
   const routineById = new Map(routines.map((r) => [r.id, r]))
   const progress = planProgress(plan, workouts, now)
   const editPlan = () => nav.push(<PlanEditor />, t('tabToday'))
-  const routineName = (index: number) => routineById.get(progress.slots[index].routineId)?.name || t('unnamedRoutine')
 
   // Hueco elegido para hoy en lugar del primero pendiente. Los que se saltan siguen pendientes.
   const [chosen, setChosen] = useState<number | null>(null)
@@ -53,10 +51,8 @@ export function TodayScreen() {
     const routine = routineById.get(progress.slots[index].routineId)
     if (routine) void start(routine)
   }
-  /** Con el entreno de hoy hecho, elegir uno pendiente lo empieza; si no, pasa a ser el de hoy. */
+  /** Tocar una rutina pendiente la pone para hoy; con el entreno de hoy ya hecho, la empieza. */
   const pick = (index: number) => (progress.doneToday ? startSlot(index) : setChosen(index))
-  const choosePending = (exclude: number | null) =>
-    dialogs.actions(t('pendingWorkouts'), pending.filter((i) => i !== exclude).map((i) => ({ label: routineName(i), onSelect: () => pick(i) })))
 
   return (
     <Screen
@@ -78,8 +74,6 @@ export function TodayScreen() {
               progress={progress}
               shown={shown}
               routineById={routineById}
-              canChoose={pending.length > 1}
-              onChoose={() => choosePending(progress.doneToday ? null : shown)}
               onStart={start}
               onOpen={open}
               onSummary={(id) => sheet.present(<WorkoutSummaryScreen workoutId={id} />)}
@@ -113,13 +107,11 @@ export function TodayScreen() {
   )
 }
 
-function TodayCard({ progress, shown, routineById, canChoose, onChoose, onStart, onOpen, onSummary, onAnyway }: {
+function TodayCard({ progress, shown, routineById, onStart, onOpen, onSummary, onAnyway }: {
   progress: PlanProgress
   /** Hueco que se propone hoy: el primero pendiente o el elegido. */
   shown: number | null
   routineById: Map<string, Routine>
-  canChoose: boolean
-  onChoose: () => void
   onStart: (r: Routine) => void
   onOpen: (workoutId: string) => void
   onSummary: (workoutId: string) => void
@@ -150,7 +142,6 @@ function TodayCard({ progress, shown, routineById, canChoose, onChoose, onStart,
         </div>
         <div className="secondary">{next ? t('tomorrow', { name: next.name || t('unnamedRoutine') }) : t('weekDoneAfterToday')}</div>
         <button className="primary-button" onClick={() => onSummary(progress.doneToday!)}>{t('viewSummary')}</button>
-        {next && <button className="bar-button" style={{ justifySelf: 'center' }} onClick={() => (canChoose ? onChoose() : onStart(next))}>{t('doAnyway')}</button>}
       </div>
     )
   }
@@ -190,7 +181,6 @@ function TodayCard({ progress, shown, routineById, canChoose, onChoose, onStart,
         })}
       </ul>
       <button className="primary-button" onClick={() => onStart(current)}><PlayIcon width={18} height={18} /> {t('startWorkout')}</button>
-      {canChoose && <button className="bar-button" style={{ justifySelf: 'center' }} onClick={onChoose}>{t('chooseOther')}</button>}
     </div>
   )
 }
@@ -202,31 +192,26 @@ function PlanEditor() {
   const routineById = new Map(routines.map((r) => [r.id, r]))
   const usable = routines.filter((r) => r.items.length > 0)
   const save = (routineIds: string[]) => db.plan.put({ id: 'week', routineIds })
-  const move = (index: number, by: number) => {
-    const ids = [...plan]
-    const [id] = ids.splice(index, 1)
-    ids.splice(index + by, 0, id)
-    void save(ids)
-  }
 
   return (
     <Screen title={t('weeklyPlan')}>
       <div style={{ height: 16 }} />
-      <Section footer={usable.length ? t('planFooter') : t('planEmptyRoutines')}>
-        {plan.map((id, index) => (
-          <Row
-            key={`${id}-${index}`}
-            leading={<span className="num tertiary" style={{ width: 18, fontWeight: 600 }}>{index + 1}</span>}
-            title={<strong style={{ fontWeight: 600 }} className="truncate">{routineById.get(id)?.name || t('unnamedRoutine')}</strong>}
-            trailing={
-              <span style={{ display: 'inline-flex', gap: 4 }}>
-                <button className="bar-button" aria-label={t('moveUp')} disabled={index === 0} onClick={() => move(index, -1)}><ArrowUp width={18} height={18} /></button>
-                <button className="bar-button" aria-label={t('moveDown')} disabled={index === plan.length - 1} onClick={() => move(index, 1)}><ArrowDown width={18} height={18} /></button>
-                <button className="bar-button" style={{ color: 'var(--red)' }} aria-label={t('remove')} onClick={() => void save(plan.filter((_, i) => i !== index))}><TrashIcon width={18} height={18} /></button>
-              </span>
-            }
-          />
-        ))}
+      <Section footer={usable.length ? t('planEditFooter') : t('planEmptyRoutines')}>
+        <SortableList
+          items={plan}
+          onMove={(from, to) => void save(moveItem(plan, from, to))}
+          itemClassName="row"
+          itemStyle={{ gap: 4 }}
+          handleLabel={t('reorder')}
+          renderItem={(id, index, handle) => (
+            <>
+              {handle}
+              <span className="num tertiary" style={{ width: 22, fontWeight: 600 }}>{index + 1}</span>
+              <strong style={{ flex: 1, fontWeight: 600 }} className="truncate">{routineById.get(id)?.name || t('unnamedRoutine')}</strong>
+              <button className="bar-button" style={{ color: 'var(--red)' }} aria-label={t('remove')} onClick={() => void save(plan.filter((_, i) => i !== index))}><TrashIcon width={18} height={18} /></button>
+            </>
+          )}
+        />
         {usable.length > 0 && (
           <Row
             className="action"
