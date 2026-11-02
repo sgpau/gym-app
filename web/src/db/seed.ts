@@ -138,3 +138,26 @@ export async function seedIfEmpty(db: GymDatabase, lang: Lang): Promise<boolean>
   await seedDefaults(db, lang)
   return true
 }
+
+/**
+ * Pone en el idioma activo los nombres conocidos (ejercicios y rutinas por defecto o antiguos) que
+ * estén guardados en el otro idioma. Los nombres propios no se tocan, y nunca se repite un nombre.
+ */
+export async function localizeDefaults(db: GymDatabase, lang: Lang): Promise<number> {
+  return db.transaction('rw', [db.exercises, db.routines], async () => {
+    let renamed = 0
+    for (const table of [db.exercises, db.routines] as const) {
+      const rows: { id: string; name: string }[] = await table.toArray()
+      const taken = new Set(rows.map((r) => r.name.trim().toLowerCase()))
+      for (const row of rows) {
+        const name = localizedName(row.name, lang)
+        if (name === row.name || taken.has(name.toLowerCase())) continue
+        taken.delete(row.name.trim().toLowerCase())
+        taken.add(name.toLowerCase())
+        await table.update(row.id, { name })
+        renamed += 1
+      }
+    }
+    return renamed
+  })
+}

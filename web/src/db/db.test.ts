@@ -7,7 +7,7 @@ import { makeWorkout, workoutDate } from './factory'
 import { exerciseLogs, previousWorkoutOfRoutine, workoutComparison } from './history'
 import { deleteWorkoutsAndRoutines, exportBackup, importBackup } from './importer'
 import { GymDatabase, type Exercise } from './model'
-import { localizedName, seedDefaults, seedIfEmpty } from './seed'
+import { localizeDefaults, localizedName, seedDefaults, seedIfEmpty } from './seed'
 
 const sample = readFileSync(new URL('../../public/sample-data.json', import.meta.url), 'utf8')
 let db: GymDatabase
@@ -66,6 +66,27 @@ describe('base de datos', () => {
     expect(lower2.items.map((i) => exercises.get(i.exerciseId))).toEqual(['Pes mort romanès', 'Esquat búlgar', 'Abducció', 'Adducció', 'Curl femoral'])
     const byId = new Map(routines.map((r) => [r.id, r.name]))
     expect((await db.plan.get('week'))!.routineIds.map((id) => byId.get(id))).toEqual(['Tren superior 1', 'Tren inferior 1', 'Tren superior 2', 'Tren inferior 2'])
+  })
+
+  it('los nombres por defecto cambian al idioma de la app; los propios no', async () => {
+    await seedIfEmpty(db, 'ca')
+    await db.exercises.add({ id: 'mine', name: 'Mi ejercicio', muscleGroup: 'other', trackingType: 'reps', notes: '', createdAt: 0 })
+    expect(await localizeDefaults(db, 'es')).toBe(14) // los demás se llaman igual en los dos idiomas
+    const names = (await db.exercises.toArray()).map((e) => e.name)
+    expect(names).toContain('Sentadilla búlgara')
+    expect(names).toContain('Mi ejercicio')
+    expect(names).not.toContain('Esquat búlgar')
+    expect((await db.routines.toArray()).map((r) => r.name)).toContain('Tren inferior 2')
+    expect(await localizeDefaults(db, 'es')).toBe(0)
+  })
+
+  it('al traducir no deja dos ejercicios con el mismo nombre', async () => {
+    await db.exercises.bulkAdd([
+      { id: 'a', name: 'Rem neutre', muscleGroup: 'back', trackingType: 'reps', notes: '', createdAt: 0 },
+      { id: 'b', name: 'Remo neutro', muscleGroup: 'back', trackingType: 'reps', notes: '', createdAt: 1 },
+    ])
+    expect(await localizeDefaults(db, 'es')).toBe(0)
+    expect((await db.exercises.get('a'))!.name).toBe('Rem neutre')
   })
 
   it('restaurar los datos por defecto solo crea lo que falta', async () => {

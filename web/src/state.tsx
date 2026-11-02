@@ -1,7 +1,7 @@
 import { useLiveQuery } from 'dexie-react-hooks'
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { GymDatabase, type Exercise, type Routine, type Workout } from './db/model'
-import { seedIfEmpty } from './db/seed'
+import { localizeDefaults, seedIfEmpty } from './db/seed'
 import { deviceLang, makeI18n, type I18n, type Lang } from './i18n'
 
 export const db = new GymDatabase()
@@ -92,10 +92,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   // Ejercicios iniciales la primera vez, y pedir que Safari no borre los datos.
   useEffect(() => {
-    void seedIfEmpty(db, lang)
     void navigator.storage?.persist?.()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+  // Los nombres por defecto siguen el idioma de la app (al abrirla y al cambiar de idioma).
+  useEffect(() => {
+    void seedIfEmpty(db, lang).then(() => localizeDefaults(db, lang))
+  }, [lang])
 
   return <AppContext.Provider value={{ ...i18n, settings, update, isDark }}>{children}</AppContext.Provider>
 }
