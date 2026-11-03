@@ -440,3 +440,5 @@ button.row:active { background: var(--fill-2); }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 1ms !important; transition-duration: 1ms !important; }
 }
+/* Ejercicio levantado al arrastrarlo dentro de un entreno. */
+.entry.lifted .list { box-shadow: 0 8px 24px rgb(0 0 0 / 0.18); }

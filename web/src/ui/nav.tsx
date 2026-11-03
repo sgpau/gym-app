@@ -76,13 +76,14 @@ export function SheetHost({ children }: { children: ReactNode }) {
       {children}
       {sheets.map((sheet) =>
         createPortal(
-          <div key={sheet.key}>
+          <div>
             <div className="backdrop" onClick={sheet.full ? undefined : dismiss} />
             <div className={`sheet${sheet.full ? ' full' : ''}`} role="dialog" aria-modal="true">
               <Stack root={sheet.node} inSheet />
             </div>
           </div>,
           document.body,
+          String(sheet.key),
         ),
       )}
     </SheetContext.Provider>

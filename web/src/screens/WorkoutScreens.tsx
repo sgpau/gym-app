@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import type { Delta, ExerciseComparison } from '../core/comparison'
 import { formatDuration, formatMetricValue, formatSet, formatSetSummary, formatWeight, formatWorkoutText } from '../core/format'
 import type { ProgressMetric } from '../core/stats'
@@ -14,6 +14,8 @@ import { useDialogs } from '../ui/dialogs'
 import { BoltIcon, EllipsisIcon, ListIcon, PlayIcon, PlusIcon, StopIcon, TrashIcon, TrophyIcon } from '../ui/icons'
 import { BarButton, Empty, NumberField, Row, Screen, Section } from '../ui/kit'
 import { useNav, useSheet } from '../ui/nav'
+import { forgetOpenWorkout, rememberOpenWorkout } from '../ui/openWorkout'
+import { moveItem, SortableList } from '../ui/sortable'
 import { ExercisePicker } from './ExerciseScreens'
 
 /**
@@ -85,6 +87,11 @@ function WorkoutEditor({ workoutId, isNew }: { workoutId: string; isNew: boolean
   const sheet = useSheet()
   const nav = useNav()
   const dialogs = useDialogs()
+  // Si la página se recarga con el entreno abierto, Hoy lo vuelve a abrir.
+  useEffect(() => {
+    rememberOpenWorkout({ id: workoutId, isNew })
+    return () => forgetOpenWorkout(workoutId)
+  }, [workoutId, isNew])
   const workout = workouts.find((w) => w.id === workoutId)
   if (!workout) return <Screen title="">{null}</Screen>
 
@@ -129,27 +136,33 @@ function WorkoutEditor({ workoutId, isNew }: { workoutId: string; isNew: boolean
         </Row>
       </Section>
 
-      {workout.entries.map((entry, index) => {
-        const exercise = exerciseMap.get(entry.exerciseId)
-        if (!exercise) return null
-        return (
-          <EntrySection
-            key={`${entry.exerciseId}-${index}`}
-            entry={entry}
-            exercise={exercise}
-            workout={workout}
-            workouts={workouts}
-            onChange={(e) => updateEntry(index, e)}
-            onRemove={() =>
-              dialogs.actions(exercise.name, [{
-                label: t('removeExercise'),
-                destructive: true,
-                onSelect: () => setEntries(workout.entries.filter((_, i) => i !== index)),
-              }])
-            }
-          />
-        )
-      })}
+      <SortableList
+        items={workout.entries}
+        onMove={(from, to) => setEntries(moveItem(workout.entries, from, to))}
+        itemClassName="entry"
+        handleLabel={t('reorder')}
+        renderItem={(entry, index, handle) => {
+          const exercise = exerciseMap.get(entry.exerciseId)
+          if (!exercise) return null
+          return (
+            <EntrySection
+              entry={entry}
+              exercise={exercise}
+              workout={workout}
+              workouts={workouts}
+              handle={handle}
+              onChange={(e) => updateEntry(index, e)}
+              onRemove={() =>
+                dialogs.actions(exercise.name, [{
+                  label: t('removeExercise'),
+                  destructive: true,
+                  onSelect: () => setEntries(workout.entries.filter((_, i) => i !== index)),
+                }])
+              }
+            />
+          )
+        }}
+      />
 
       <Section>
         <Row
@@ -183,8 +196,8 @@ function NotesField({ value, placeholder, onChange }: { value: string; placehold
   return <textarea rows={1} aria-label={placeholder} placeholder={placeholder} value={text} onChange={(e) => { setText(e.target.value); onChange(e.target.value) }} />
 }
 
-function EntrySection({ entry, exercise, workout, workouts, onChange, onRemove }: {
-  entry: WorkoutEntry; exercise: Exercise; workout: Workout; workouts: Workout[]; onChange: (e: WorkoutEntry) => void; onRemove: () => void
+function EntrySection({ entry, exercise, workout, workouts, handle, onChange, onRemove }: {
+  entry: WorkoutEntry; exercise: Exercise; workout: Workout; workouts: Workout[]; handle: ReactNode; onChange: (e: WorkoutEntry) => void; onRemove: () => void
 }) {
   const app = useApp()
   const { t } = app
@@ -194,7 +207,8 @@ function EntrySection({ entry, exercise, workout, workouts, onChange, onRemove }
 
   return (
     <section className="section">
-      <div className="section-header" style={{ display: 'flex', alignItems: 'flex-end', gap: 8, textTransform: 'none' }}>
+      <div className="section-header" style={{ display: 'flex', alignItems: 'flex-end', gap: 4, textTransform: 'none' }}>
+        <span style={{ marginLeft: -12, alignSelf: 'center' }}>{handle}</span>
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ fontSize: 17, fontWeight: 600, color: 'var(--label)' }}>{exercise.name}</div>
           {last && (
@@ -206,30 +220,39 @@ function EntrySection({ entry, exercise, workout, workouts, onChange, onRemove }
         <button className="bar-button" style={{ minHeight: 32 }} aria-label={t('removeExercise')} onClick={onRemove}><EllipsisIcon width={24} height={24} /></button>
       </div>
       <div className="list">
-        {entry.sets.map((set, index) => (
-          <SetRow
-            key={index}
-            number={index + 1}
-            set={set}
-            repsHint={last?.sets[index]?.kind === 'reps' ? last.sets[index].reps : null}
-            timed={exercise.trackingType === 'time'}
-            onChange={(s) => setAt(index, s)}
-            onDelete={() => onChange({ ...entry, sets: entry.sets.filter((_, i) => i !== index) })}
-          />
-        ))}
+        <SortableList
+          items={entry.sets}
+          onMove={(from, to) => onChange({ ...entry, sets: moveItem(entry.sets, from, to) })}
+          itemClassName="row"
+          itemStyle={{ gap: 8, paddingLeft: 4, paddingRight: 8 }}
+          handleLabel={t('reorder')}
+          renderItem={(set, index, setHandle) => (
+            <SetRow
+              number={index + 1}
+              set={set}
+              handle={setHandle}
+              repsHint={last?.sets[index]?.kind === 'reps' ? last.sets[index].reps : null}
+              timed={exercise.trackingType === 'time'}
+              onChange={(s) => setAt(index, s)}
+              onDelete={() => onChange({ ...entry, sets: entry.sets.filter((_, i) => i !== index) })}
+            />
+          )}
+        />
         <Row className="action" leading={<PlusIcon width={18} height={18} />} title={t('addSet')} onClick={() => onChange({ ...entry, sets: [...entry.sets, nextSet(entry)] })} />
       </div>
     </section>
   )
 }
 
-function SetRow({ number, set, repsHint, timed, onChange, onDelete }: {
+/** Contenido de la fila de una serie; la fila (y el asa para arrastrarla) la pone la lista. */
+function SetRow({ number, set, handle, repsHint, timed, onChange, onDelete }: {
   /** Repeticiones de esta misma serie la última vez, como pista en el campo vacío. */
-  number: number; set: WorkoutSet; repsHint: number | null; timed: boolean; onChange: (s: WorkoutSet) => void; onDelete: () => void
+  number: number; set: WorkoutSet; handle: ReactNode; repsHint: number | null; timed: boolean; onChange: (s: WorkoutSet) => void; onDelete: () => void
 }) {
   const { t } = useApp()
   return (
-    <div className="row" style={{ gap: 10, paddingRight: 8 }}>
+    <>
+      {handle}
       <span className="num tertiary" style={{ width: 18, fontWeight: 600 }} aria-label={t('setNumber', { n: number })}>{number}</span>
       {timed ? (
         <DurationControl value={set.duration} onChange={(duration) => onChange({ ...set, duration })} />
@@ -247,7 +270,7 @@ function SetRow({ number, set, repsHint, timed, onChange, onDelete }: {
       <button className="bar-button" style={{ minWidth: 32, padding: 0, color: 'var(--label-3)' }} aria-label={t('deleteSet')} onClick={onDelete}>
         <TrashIcon width={18} height={18} />
       </button>
-    </div>
+    </>
   )
 }
 

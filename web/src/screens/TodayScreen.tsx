@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { formatDuration } from '../core/format'
 import { planProgress, type PlanProgress } from '../core/weeklyPlan'
 import { makeWorkout } from '../db/factory'
@@ -8,6 +8,7 @@ import { shortDay } from '../ui/dates'
 import { CheckCircle, Circle, ListIcon, PlayIcon, PlusIcon, TrashIcon } from '../ui/icons'
 import { BarButton, Empty, Row, Screen, Section } from '../ui/kit'
 import { useNav, useSheet } from '../ui/nav'
+import { takeOpenWorkout } from '../ui/openWorkout'
 import { moveItem, SortableList } from '../ui/sortable'
 import { WorkoutFlow, WorkoutSummaryScreen } from './WorkoutScreens'
 
@@ -47,6 +48,17 @@ export function TodayScreen() {
     sheet.present(<WorkoutFlow workoutId={workout.id} isNew />, { full: true })
   }
   const open = (workoutId: string) => sheet.present(<WorkoutFlow workoutId={workoutId} />, { full: true })
+
+  // Tras una recarga, vuelve a abrir el entreno que estaba en pantalla si sigue sin finalizar.
+  const restored = useRef(false)
+  useEffect(() => {
+    if (!loaded || restored.current) return
+    restored.current = true
+    const previous = takeOpenWorkout()
+    if (previous && workouts.some((w) => w.id === previous.id && !w.finished)) {
+      sheet.present(<WorkoutFlow workoutId={previous.id} isNew={previous.isNew} />, { full: true })
+    }
+  }, [loaded, workouts, sheet])
   const startSlot = (index: number) => {
     const routine = routineById.get(progress.slots[index].routineId)
     if (routine) void start(routine)
