@@ -5,10 +5,10 @@ La misma app de rutinas que la versión Swift, pero como **app web instalable**.
 - **Rutinas por defecto**: la primera vez se crean 4 rutinas (Tren superior 1 y 2, Tren inferior 1 y 2) con sus 20 ejercicios, y el plan semanal en ese orden. Desde **Ajustes → Restaurar rutinas por defecto** se vuelven a crear las que falten, sin borrar nada.
 - **Hoy**: plan semanal con las rutinas en orden, sin día fijo. Al abrir la app sale el siguiente entreno pendiente; al terminarlo, al día siguiente toca el siguiente. Cada lunes vuelve a empezar.
 - **Calendario**: los días con entreno llevan un punto. Desde ahí se registra el entreno, por rutina o libre.
-- **Registro**: series de repeticiones + kg, o de tiempo con cronómetro. Los ejercicios y las series se reordenan arrastrando el asa ≡. Las repeticiones se anotan al hacer cada serie y pueden ser distintas en cada una; en gris sale lo que hiciste esa misma serie la última vez.
+- **Registro**: series de repeticiones + kg, o de tiempo con cronómetro. Los ejercicios y las series se reordenan arrastrando el asa ≡. Las repeticiones se anotan al hacer cada serie y pueden ser distintas en cada una; en gris sale lo que hiciste esa misma serie la última vez. Desde **Añadir ejercicio** se puede crear uno nuevo sin salir del entreno. Con la flecha ⌄ el entreno se **minimiza** a una barra sobre las pestañas: puedes moverte por la app y volver a él tocándola.
 - **Resumen al finalizar**: comparación con el entreno anterior (▲/▼, %) y récords personales 🏆. El botón **Copiar entreno** copia las series, repeticiones y pesos para pegarlos, por ejemplo, en la descripción de la actividad de Strava.
 - **Progreso**: gráfica por ejercicio y periodo, récords e historial.
-- **Ajustes** (pestaña propia): modo Sistema / Claro / Oscuro, 9 colores, castellano o catalán, y **exportar o importar una copia de seguridad (JSON)**.
+- **Ajustes** (pestaña propia): modo Sistema / Claro / Oscuro, 10 colores (incluido Rosa Barbie), castellano o catalán, y **exportar o importar una copia de seguridad (JSON)**.
 - **Menú oculto**: toca 7 veces «Versión» en Ajustes. Sirve para cargar un año de datos de prueba o borrar los entrenos y rutinas.
 - **Sin conexión**: funciona sin internet. Los datos se guardan solo en el iPhone (IndexedDB). La app pide almacenamiento persistente y Ajustes → Datos muestra si lo tiene.
 

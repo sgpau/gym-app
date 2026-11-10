@@ -9,7 +9,7 @@ import { useDialogs } from '../ui/dialogs'
 import { ChevronLeft, ChevronRight, EllipsisIcon, PlusIcon } from '../ui/icons'
 import { Screen } from '../ui/kit'
 import { useSheet } from '../ui/nav'
-import { WorkoutFlow, WorkoutSummaryScreen } from './WorkoutScreens'
+import { WorkoutFlow, workoutSheetId, WorkoutSummaryScreen } from './WorkoutScreens'
 
 export function CalendarScreen() {
   const app = useApp()
@@ -111,7 +111,7 @@ function WorkoutCard({ workout }: { workout: Workout }) {
 
   return (
     <div className="card" style={{ display: 'flex', alignItems: 'center', gap: 8, padding: 0 }}>
-      <button style={{ flex: 1, textAlign: 'left', padding: 16, minWidth: 0 }} onClick={() => sheet.present(<WorkoutFlow workoutId={workout.id} />, { full: true })}>
+      <button style={{ flex: 1, textAlign: 'left', padding: 16, minWidth: 0 }} onClick={() => sheet.present(<WorkoutFlow workoutId={workout.id} />, { full: true, id: workoutSheetId(workout.id) })}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <strong className="truncate" style={{ fontSize: 17 }}>{title}</strong>
           {!workout.finished && <span className="badge">{t('inProgress')}</span>}

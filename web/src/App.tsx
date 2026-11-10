@@ -8,7 +8,7 @@ import { TodayScreen } from './screens/TodayScreen'
 import { AppProvider, DataProvider, useApp } from './state'
 import { DialogHost } from './ui/dialogs'
 import { CalendarIcon, ChartIcon, DumbbellIcon, FlameIcon, GearIcon, ListIcon } from './ui/icons'
-import { SheetHost, Stack } from './ui/nav'
+import { SheetHost, Stack, useSheet } from './ui/nav'
 
 type Tab = 'today' | 'calendar' | 'routines' | 'exercises' | 'progress' | 'settings'
 
@@ -29,6 +29,7 @@ export function App() {
 function Shell() {
   const { t } = useApp()
   const [tab, setTab] = useState<Tab>('today')
+  const { minimizedBars } = useSheet()
   const tabs: { id: Tab; label: string; icon: JSX.Element; root: JSX.Element }[] = [
     { id: 'today', label: t('tabToday'), icon: <FlameIcon />, root: <TodayScreen /> },
     { id: 'calendar', label: t('tabCalendar'), icon: <CalendarIcon />, root: <CalendarScreen /> },
@@ -38,7 +39,7 @@ function Shell() {
     { id: 'settings', label: t('settings'), icon: <GearIcon />, root: <SettingsScreen /> },
   ]
   return (
-    <div className="app">
+    <div className={`app${minimizedBars.length ? ' has-mini' : ''}`}>
       <div className="tab-content">
         {/* Cada pestaña conserva su pila y su scroll al cambiar de pestaña. */}
         {tabs.map((item) => (
@@ -47,6 +48,12 @@ function Shell() {
           </div>
         ))}
       </div>
+      {minimizedBars.length > 0 && (
+        // Entrenos minimizados: se puede seguir usando la app y volver a ellos tocando la barra.
+        <div className="mini-bars">
+          {minimizedBars.map((item) => <div key={item.key}>{item.bar}</div>)}
+        </div>
+      )}
       <nav className="tabbar" role="tablist">
         {tabs.map((item) => (
           <button key={item.id} className="tab" role="tab" aria-selected={item.id === tab} onClick={() => setTab(item.id)}>

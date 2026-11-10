@@ -96,11 +96,16 @@ export function ExerciseListScreen() {
   )
 }
 
-export function ExerciseEditor({ exercise }: { exercise?: Exercise }) {
+export function ExerciseEditor({ exercise, initialName, onSaved }: {
+  exercise?: Exercise
+  /** Nombre ya escrito, p. ej. lo que se buscó en el selector. */
+  initialName?: string
+  onSaved?: (exercise: Exercise) => void
+}) {
   const { t } = useApp()
   const { workouts } = useData()
   const sheet = useSheet()
-  const [name, setName] = useState(exercise?.name ?? '')
+  const [name, setName] = useState(exercise?.name ?? initialName ?? '')
   const [group, setGroup] = useState<MuscleGroup>(exercise?.muscleGroup ?? 'chest')
   const [type, setType] = useState<TrackingType>(exercise?.trackingType ?? 'reps')
   const [notes, setNotes] = useState(exercise?.notes ?? '')
@@ -109,14 +114,16 @@ export function ExerciseEditor({ exercise }: { exercise?: Exercise }) {
   const save = async () => {
     const trimmed = name.trim()
     if (!trimmed) return
-    await db.exercises.put({
+    const saved: Exercise = {
       id: exercise?.id ?? newId(),
       name: trimmed,
       muscleGroup: group,
       trackingType: type,
       notes,
       createdAt: exercise?.createdAt ?? Date.now(),
-    })
+    }
+    await db.exercises.put(saved)
+    onSaved?.(saved)
     sheet.dismiss()
   }
 
@@ -163,6 +170,12 @@ export function ExercisePicker({ title, onPick }: { title: string; onPick: (ids:
   const [query, setQuery] = useState('')
   const [selection, setSelection] = useState<string[]>([])
   const toggle = (id: string) => setSelection((s) => (s.includes(id) ? s.filter((x) => x !== id) : [...s, id]))
+  const groups = grouped(exercises, query)
+  const typed = query.trim()
+  // Crear un ejercicio que no existe sin salir: queda marcado para añadirlo.
+  const create = () => sheet.present(
+    <ExerciseEditor initialName={typed} onSaved={(exercise) => { setSelection((s) => [...s, exercise.id]); setQuery('') }} />,
+  )
 
   return (
     <Screen
@@ -176,7 +189,11 @@ export function ExercisePicker({ title, onPick }: { title: string; onPick: (ids:
     >
       <div style={{ height: 8 }} />
       <SearchField value={query} onChange={setQuery} />
-      {grouped(exercises, query).map(([group, list]) => (
+      {typed && groups.length === 0 && <Empty icon={<SearchIcon />} title={t('noResults', { q: typed })} />}
+      <Section>
+        <Row className="action" leading={<PlusIcon width={20} height={20} />} title={typed ? t('createNamed', { q: typed }) : t('createExercise')} onClick={create} />
+      </Section>
+      {groups.map(([group, list]) => (
         <Section key={group} header={t(muscleKey(group))}>
           {list.map((exercise) => {
             const selected = selection.includes(exercise.id)

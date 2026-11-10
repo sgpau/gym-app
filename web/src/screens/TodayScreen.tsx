@@ -10,7 +10,7 @@ import { BarButton, Empty, Row, Screen, Section } from '../ui/kit'
 import { useNav, useSheet } from '../ui/nav'
 import { takeOpenWorkout } from '../ui/openWorkout'
 import { moveItem, SortableList } from '../ui/sortable'
-import { WorkoutFlow, WorkoutSummaryScreen } from './WorkoutScreens'
+import { WorkoutFlow, workoutSheetId, WorkoutSummaryScreen } from './WorkoutScreens'
 
 /** La fecha actual, que se actualiza al volver a la app y cada minuto (para cambiar de día a medianoche). */
 function useNow() {
@@ -45,9 +45,9 @@ export function TodayScreen() {
   const start = async (routine: Routine) => {
     const workout = makeWorkout(routine, now, workouts, exerciseMap)
     await db.workouts.add(workout)
-    sheet.present(<WorkoutFlow workoutId={workout.id} isNew />, { full: true })
+    sheet.present(<WorkoutFlow workoutId={workout.id} isNew />, { full: true, id: workoutSheetId(workout.id) })
   }
-  const open = (workoutId: string) => sheet.present(<WorkoutFlow workoutId={workoutId} />, { full: true })
+  const open = (workoutId: string) => sheet.present(<WorkoutFlow workoutId={workoutId} />, { full: true, id: workoutSheetId(workoutId) })
 
   // Tras una recarga, vuelve a abrir el entreno que estaba en pantalla si sigue sin finalizar.
   const restored = useRef(false)
@@ -56,7 +56,7 @@ export function TodayScreen() {
     restored.current = true
     const previous = takeOpenWorkout()
     if (previous && workouts.some((w) => w.id === previous.id && !w.finished)) {
-      sheet.present(<WorkoutFlow workoutId={previous.id} isNew={previous.isNew} />, { full: true })
+      sheet.present(<WorkoutFlow workoutId={previous.id} isNew={previous.isNew} />, { full: true, id: workoutSheetId(previous.id) })
     }
   }, [loaded, workouts, sheet])
   const startSlot = (index: number) => {

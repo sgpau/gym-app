@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import type { Delta, ExerciseComparison } from '../core/comparison'
-import { formatDuration, formatMetricValue, formatSet, formatSetSummary, formatWeight, formatWorkoutText } from '../core/format'
+import { formatDuration, formatMetricValue, formatSet, formatWeight, formatWorkoutText } from '../core/format'
 import type { ProgressMetric } from '../core/stats'
 import { makeEntry, makeWorkout, nextSet } from '../db/factory'
-import { lastLog, workoutComparison, workoutLogs } from '../db/history'
+import { lastLog, workoutComparison, workoutLogs, workoutSummary } from '../db/history'
 import type { Exercise, Routine, Workout, WorkoutEntry, WorkoutSet } from '../db/model'
 import type { Key } from '../i18n'
 import { db, useApp, useData } from '../state'
@@ -11,7 +11,7 @@ import { PairedBars } from '../ui/charts'
 import { dayTitle, longDay, shortDay, toLocalInput } from '../ui/dates'
 import { DeltaBadge } from '../ui/DeltaBadge'
 import { useDialogs } from '../ui/dialogs'
-import { BoltIcon, EllipsisIcon, ListIcon, PlayIcon, PlusIcon, StopIcon, TrashIcon, TrophyIcon } from '../ui/icons'
+import { BoltIcon, ChevronDown, ChevronUp, EllipsisIcon, ListIcon, PlayIcon, PlusIcon, StopIcon, TrashIcon, TrophyIcon } from '../ui/icons'
 import { BarButton, Empty, NumberField, Row, Screen, Section } from '../ui/kit'
 import { useNav, useSheet } from '../ui/nav'
 import { forgetOpenWorkout, rememberOpenWorkout } from '../ui/openWorkout'
@@ -22,6 +22,9 @@ import { ExercisePicker } from './ExerciseScreens'
  * Hoja a pantalla completa: elegir rutina → registrar → finalizar → resumen.
  * Con `isNew`, el entreno recién creado se descarta al cancelar.
  */
+/** `id` de la hoja de un entreno: abrirlo otra vez (p. ej. minimizado) vuelve a la misma hoja. */
+export const workoutSheetId = (workoutId: string) => `workout:${workoutId}`
+
 export function WorkoutFlow({ day, workoutId, isNew = false }: { day?: Date; workoutId?: string; isNew?: boolean }) {
   return workoutId ? <WorkoutEditor workoutId={workoutId} isNew={isNew} /> : <StartWorkout day={day ?? new Date()} />
 }
@@ -37,6 +40,7 @@ function StartWorkout({ day }: { day: Date }) {
   const start = async (routine: Routine | null) => {
     const workout = makeWorkout(routine, day, workouts, exerciseMap)
     await db.workouts.add(workout)
+    sheet.identify(workoutSheetId(workout.id))
     nav.push(<WorkoutEditor workoutId={workout.id} isNew />)
   }
   const lastDone = (routine: Routine) => {
@@ -107,6 +111,10 @@ function WorkoutEditor({ workoutId, isNew }: { workoutId: string; isNew: boolean
     if (workout.entries.length === 0) return void discard()
     dialogs.confirm(t('discardWorkoutTitle'), t('discard'), () => void discard(), t('discardWorkoutMessage'))
   }
+  const minimize = () => {
+    ;(document.activeElement as HTMLElement | null)?.blur()
+    sheet.minimize(<WorkoutMiniBar workoutId={workout.id} />)
+  }
   const finish = async () => {
     ;(document.activeElement as HTMLElement | null)?.blur()
     await save({ finished: true })
@@ -117,7 +125,12 @@ function WorkoutEditor({ workoutId, isNew }: { workoutId: string; isNew: boolean
     <Screen
       title={title}
       solidBar
-      leading={<BarButton onClick={cancel}>{isNew ? t('cancel') : t('close')}</BarButton>}
+      leading={
+        <>
+          <BarButton label={t('minimize')} onClick={minimize}><ChevronDown width={22} height={22} /></BarButton>
+          <BarButton onClick={cancel}>{isNew ? t('cancel') : t('close')}</BarButton>
+        </>
+      }
       trailing={<BarButton prominent disabled={!hasData} onClick={finish}>{workout.finished ? t('save') : t('finish')}</BarButton>}
     >
       <div style={{ height: 16 }} />
@@ -176,10 +189,9 @@ function WorkoutEditor({ workoutId, isNew }: { workoutId: string; isNew: boolean
                 onPick={async (ids) => {
                   const current = await db.workouts.get(workout.id)
                   if (!current) return
-                  const added = ids.flatMap((id) => {
-                    const exercise = exerciseMap.get(id)
-                    return exercise ? [makeEntry(exercise, current, workouts, exerciseMap)] : []
-                  })
+                  // De la base de datos: un ejercicio recién creado en el selector aún no está en `exerciseMap`.
+                  const picked = await db.exercises.bulkGet(ids)
+                  const added = picked.flatMap((exercise) => (exercise ? [makeEntry(exercise, current, workouts, exerciseMap)] : []))
                   await db.workouts.update(current.id, { entries: [...current.entries, ...added] })
                 }}
               />,
@@ -188,6 +200,28 @@ function WorkoutEditor({ workoutId, isNew }: { workoutId: string; isNew: boolean
         />
       </Section>
     </Screen>
+  )
+}
+
+/** Barra del entreno minimizado, sobre las pestañas. Tocarla vuelve al entreno. */
+function WorkoutMiniBar({ workoutId }: { workoutId: string }) {
+  const { t } = useApp()
+  const { workouts, routines, exerciseMap } = useData()
+  const sheet = useSheet()
+  const workout = workouts.find((w) => w.id === workoutId)
+  if (!workout) return null
+  const title = routines.find((r) => r.id === workout.routineId)?.name || t('freeWorkout')
+  const summary = workoutSummary(workout, exerciseMap)
+  const parts = [t('workoutInProgress'), t('exercisesCount', { n: workout.entries.length }), t('setsCount', { n: summary.setCount })]
+  return (
+    <button className="mini-bar" onClick={() => sheet.present(null, { id: workoutSheetId(workoutId) })} aria-label={`${title}, ${t('workoutInProgress')}`}>
+      <span className="mini-dot" aria-hidden />
+      <span style={{ flex: 1, minWidth: 0 }}>
+        <strong className="truncate" style={{ display: 'block', fontSize: 16 }}>{title}</strong>
+        <span className="secondary num truncate" style={{ display: 'block', fontSize: 13 }}>{parts.join(' · ')}</span>
+      </span>
+      <ChevronUp width={20} height={20} className="accent" />
+    </button>
   )
 }
 
@@ -209,14 +243,7 @@ function EntrySection({ entry, exercise, workout, workouts, handle, onChange, on
     <section className="section">
       <div className="section-header" style={{ display: 'flex', alignItems: 'flex-end', gap: 4, textTransform: 'none' }}>
         <span style={{ marginLeft: -12, alignSelf: 'center' }}>{handle}</span>
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontSize: 17, fontWeight: 600, color: 'var(--label)' }}>{exercise.name}</div>
-          {last && (
-            <div className="num" style={{ fontSize: 13 }}>
-              {t('lastTime', { date: shortDay(last.date, app.locale), summary: formatSetSummary(last.sets, app) })}
-            </div>
-          )}
-        </div>
+        <div style={{ flex: 1, minWidth: 0, alignSelf: 'center', fontSize: 17, fontWeight: 600, color: 'var(--label)' }}>{exercise.name}</div>
         <button className="bar-button" style={{ minHeight: 32 }} aria-label={t('removeExercise')} onClick={onRemove}><EllipsisIcon width={24} height={24} /></button>
       </div>
       <div className="list">

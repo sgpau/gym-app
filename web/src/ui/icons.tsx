@@ -24,6 +24,8 @@ export const GearIcon = (p: P) => (
 )
 export const PlusIcon = (p: P) => <svg {...base(p)} strokeWidth={2.4}><path d="M12 5v14M5 12h14" /></svg>
 export const ChevronLeft = (p: P) => <svg {...base(p)} strokeWidth={2.6}><path d="M15 4l-8 8 8 8" /></svg>
+export const ChevronDown = (p: P) => <svg {...base(p)} strokeWidth={2.6}><path d="M4 9l8 8 8-8" /></svg>
+export const ChevronUp = (p: P) => <svg {...base(p)} strokeWidth={2.6}><path d="M4 15l8-8 8 8" /></svg>
 export const ChevronRight = (p: P) => <svg {...base(p)} strokeWidth={2.6}><path d="M9 4l8 8-8 8" /></svg>
 export const RowChevron = (p: P) => (
   <svg viewBox="0 0 8 13" className="chevron" aria-hidden {...p}><path d="M1.5 1.5L6.5 6.5L1.5 11.5" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" /></svg>

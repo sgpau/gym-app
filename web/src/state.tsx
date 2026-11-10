@@ -15,6 +15,7 @@ export const ACCENTS = {
   indigo: ['#5856D6', '#5E5CE6'],
   purple: ['#AF52DE', '#BF5AF2'],
   pink: ['#FF2D55', '#FF375F'],
+  barbie: ['#E0218A', '#FF4FB0'],
   red: ['#FF3B30', '#FF453A'],
   orange: ['#FF9500', '#FF9F0A'],
   green: ['#34C759', '#30D158'],

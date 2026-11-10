@@ -37,6 +37,7 @@ export const es = {
   colorIndigo: 'Índigo',
   colorPurple: 'Morado',
   colorPink: 'Rosa',
+  colorBarbie: 'Rosa Barbie',
   colorRed: 'Rojo',
   colorOrange: 'Naranja',
   colorGreen: 'Verde',
@@ -147,7 +148,6 @@ export const es = {
   removeExerciseTitle: '¿Quitar este ejercicio?',
   discardWorkoutTitle: '¿Descartar este entreno?',
   discardWorkoutMessage: 'Se perderán las series que hayas anotado.',
-  lastTime: 'Última vez ({date}): {summary}',
   setNumber: 'Serie {n}',
   repsUnit: 'reps',
   duration: 'Duración',
@@ -196,6 +196,10 @@ export const es = {
   searchExercise: 'Buscar ejercicio',
   byTime: 'por tiempo',
   noResults: 'Sin resultados para «{q}»',
+  createExercise: 'Crear ejercicio',
+  createNamed: 'Crear «{q}»',
+  minimize: 'Minimizar',
+  workoutInProgress: 'Entreno en curso',
 
   // Ejercicios
   newExercise: 'Nuevo ejercicio',
