@@ -156,6 +156,9 @@ export const es = {
   minutes: 'Minutos',
   seconds: 'Segundos',
   deleteSet: 'Borrar serie',
+  addDrop: 'Añadir bajada',
+  dropNumber: 'Serie {n}, bajada {d}',
+  deleteDrop: 'Borrar bajada',
 
   // Resumen
   summary: 'Resumen',

@@ -3,8 +3,8 @@ import { readFileSync } from 'node:fs'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { parseBackup, serializeBackup, shiftDates } from '../core/backup'
 import { day } from '../test/helpers'
-import { makeWorkout, workoutDate } from './factory'
-import { exerciseLogs, previousWorkoutOfRoutine, workoutComparison } from './history'
+import { addDrop, makeWorkout, nextSet, workoutDate } from './factory'
+import { exerciseLogs, previousWorkoutOfRoutine, setRecord, workoutComparison } from './history'
 import { deleteWorkoutsAndRoutines, exportBackup, importBackup } from './importer'
 import { GymDatabase, type Exercise } from './model'
 import { localizeDefaults, localizedName, seedDefaults, seedIfEmpty } from './seed'
@@ -140,6 +140,38 @@ describe('base de datos', () => {
     const reparsed = parseBackup(serializeBackup(exported))
     expect(reparsed.workouts).toHaveLength(await db.workouts.count())
     expect(reparsed.routines).toHaveLength(4)
+  })
+
+  it('exportar e importar conserva los dropsets', async () => {
+    await seedIfEmpty(db, 'es')
+    const exercise = (await db.exercises.toArray()).find((e) => e.trackingType === 'reps')!
+    await db.workouts.add({
+      id: 'w', date: day(2026, 10, 2).getTime(), routineId: null, notes: '', finished: true,
+      entries: [{ exerciseId: exercise.id, sets: [
+        { reps: 8, duration: null, weight: 60 },
+        { reps: 8, duration: null, weight: 60, drops: [{ reps: 6, weight: 45 }, { reps: null, weight: 30 }] },
+      ] }],
+    })
+    const backup = parseBackup(serializeBackup(await exportBackup(db)))
+    expect(backup.workouts[0].exercises[0].sets).toEqual([
+      { reps: 8, weight: 60 },
+      { reps: 8, weight: 60, drops: [{ reps: 6, weight: 45 }, { weight: 30 }] },
+    ])
+    const other = new GymDatabase(`test-${counter++}`)
+    await importBackup(other, backup, 'es')
+    const [imported] = await other.workouts.toArray()
+    expect(imported.entries[0].sets[0].drops).toBeUndefined()
+    expect(imported.entries[0].sets[1].drops).toEqual([{ reps: 6, weight: 45 }, { reps: null, weight: 30 }])
+  })
+
+  it('las bajadas vacías no cuentan y una serie nueva copia las bajadas sin las reps', () => {
+    const set = { reps: 8, duration: null, weight: 60, drops: [{ reps: 6, weight: 45 }, { reps: null, weight: 30 }] }
+    expect(setRecord(set, 'reps')).toEqual({ kind: 'reps', reps: 8, weight: 60, drops: [{ reps: 6, weight: 45 }] })
+    expect(setRecord({ ...set, drops: [{ reps: null, weight: 30 }] }, 'reps')).toEqual({ kind: 'reps', reps: 8, weight: 60 })
+    const entry = { exerciseId: 'e', sets: [set] }
+    expect(nextSet(entry)).toEqual({ reps: 8, duration: null, weight: 60, drops: [{ reps: null, weight: 45 }, { reps: null, weight: 30 }] })
+    expect(addDrop({ exerciseId: 'e', sets: [{ reps: 8, duration: null, weight: 60 }] }).sets[0].drops).toEqual([{ reps: null, weight: null }])
+    expect(addDrop({ exerciseId: 'e', sets: [] }).sets).toEqual([])
   })
 
   it('el plan semanal se exporta, se importa y se borra con las rutinas', async () => {

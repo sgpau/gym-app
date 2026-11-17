@@ -59,6 +59,7 @@ Todas las secciones son opcionales. Los ejercicios y las rutinas se buscan por n
     "notes": "opcional",
     "exercises": [
       { "exercise": "Press de banca", "sets": [{ "reps": 8, "weight": 60 }, { "reps": 7, "weight": 62.5 }] },
+      { "exercise": "Curl de bíceps", "sets": [{ "reps": 10, "weight": 14, "drops": [{ "reps": 8, "weight": 10 }, { "reps": 6, "weight": 6 }] }] },
       { "exercise": "Plancha", "sets": [{ "duration": 60 }] }
     ]
   }]
@@ -69,6 +70,7 @@ Todas las secciones son opcionales. Los ejercicios y las rutinas se buscan por n
 - `trackingType`: `reps` o `time`.
 - `duration`: en segundos.
 - `weight`: en kg.
+- `drops`: bajadas de un dropset (solo en la PWA), cada una con `reps` y `weight`. La serie y sus bajadas cuentan como una sola serie.
 
 ## Estructura
 

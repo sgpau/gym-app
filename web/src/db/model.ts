@@ -28,11 +28,21 @@ export interface Routine {
   items: RoutineItem[]
 }
 
-/** Serie: reps o duración (segundos) y peso opcional en kg. Vacía mientras no se rellena. */
+/** Bajada de un dropset: sin descanso, menos peso y más reps. */
+export interface WorkoutDrop {
+  reps: number | null
+  weight: number | null
+}
+
+/**
+ * Serie: reps o duración (segundos) y peso opcional en kg. Vacía mientras no se rellena.
+ * Con `drops` es un dropset: la serie y sus bajadas cuentan como una sola serie.
+ */
 export interface WorkoutSet {
   reps: number | null
   duration: number | null
   weight: number | null
+  drops?: WorkoutDrop[]
 }
 
 export interface WorkoutEntry {

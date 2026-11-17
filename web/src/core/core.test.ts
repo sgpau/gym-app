@@ -20,6 +20,26 @@ describe('series', () => {
   })
 })
 
+describe('dropsets', () => {
+  const drop = repsSet(8, 60, [{ reps: 6, weight: 45 }, { reps: 5, weight: 30 }])
+  it('las bajadas suman volumen y reps', () => {
+    expect(volumeOf(drop)).toBe(480 + 270 + 150)
+    expect(summarize([drop, repsSet(8, 60)])).toMatchObject({ setCount: 2, totalReps: 27, volume: 1380 })
+  })
+  it('peso máximo, 1RM y mejor serie salen solo de la serie principal', () => {
+    const s = summarize([repsSet(10, 50, [{ reps: 20, weight: 70 }])])
+    expect(s).toMatchObject({ maxWeight: 50, maxReps: 10 })
+    expect(close(s.bestOneRepMax, 50 * (1 + 10 / 30))).toBe(true)
+    expect(oneRepMaxOf(drop)).toBe(oneRepMaxOf(repsSet(8, 60)))
+  })
+  it('sin bajadas no guarda la lista vacía', () => expect(repsSet(8, 60, [])).toEqual({ kind: 'reps', reps: 8, weight: 60 }))
+  it('textos', () => {
+    expect(formatSet(drop, es)).toBe('60 kg × 8 → 45 kg × 6 → 30 kg × 5')
+    expect(formatSet(repsSet(10, 0, [{ reps: 6, weight: 0 }]), es)).toBe('10 reps → 6 reps')
+    expect(formatSetSummary([repsSet(8, 60), repsSet(8, 60), drop], es)).toBe('8, 8, 8+6+5 · 60 kg')
+  })
+})
+
 describe('estadísticas', () => {
   it('resume series por reps', () => {
     const s = summarize([repsSet(8, 60), repsSet(8, 60), repsSet(6, 65)])

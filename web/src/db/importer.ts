@@ -71,7 +71,12 @@ export async function importBackup(db: GymDatabase, backup: GymBackup, lang: Lan
         result.setsImported += e.sets.length
         return {
           exerciseId: exerciseFor(e.exercise, timed ? 'time' : 'reps').id,
-          sets: e.sets.map((s) => ({ reps: s.reps ?? null, duration: s.duration ?? null, weight: s.weight ?? null })),
+          sets: e.sets.map((s) => ({
+            reps: s.reps ?? null,
+            duration: s.duration ?? null,
+            weight: s.weight ?? null,
+            ...(Array.isArray(s.drops) && s.drops.length ? { drops: s.drops.map((d) => ({ reps: d.reps ?? null, weight: d.weight ?? null })) } : {}),
+          })),
         }
       }),
     }))
@@ -124,6 +129,9 @@ export async function exportBackup(db: GymDatabase): Promise<GymBackup> {
                   ...(s.reps !== null ? { reps: s.reps } : {}),
                   ...(s.duration !== null ? { duration: s.duration } : {}),
                   ...(s.weight !== null ? { weight: s.weight } : {}),
+                  ...(s.drops?.length
+                    ? { drops: s.drops.map((d) => ({ ...(d.reps !== null ? { reps: d.reps } : {}), ...(d.weight !== null ? { weight: d.weight } : {}) })) }
+                    : {}),
                 })),
               }]
             : []

@@ -145,6 +145,9 @@ export const ca: Record<keyof typeof es, Entry> = {
   minutes: 'Minuts',
   seconds: 'Segons',
   deleteSet: 'Esborrar la sèrie',
+  addDrop: 'Afegir baixada',
+  dropNumber: 'Sèrie {n}, baixada {d}',
+  deleteDrop: 'Esborrar la baixada',
 
   summary: 'Resum',
   workoutCompleted: 'Entrenament completat!',
