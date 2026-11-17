@@ -212,6 +212,8 @@ export const es = {
   measuredBy: 'Se mide por',
   exerciseNotesPlaceholder: 'Técnica, ajustes de la máquina…',
   footerReps: 'En cada serie anotarás repeticiones y peso.',
+  dropset: 'Dropset',
+  dropsetFooter: 'En el entreno podrás añadir bajadas a cada serie: sin descanso, menos peso y más repeticiones.',
   footerTime: 'En cada serie anotarás la duración, con cronómetro, y un peso opcional (lastre, disco…).',
   footerTypeChange: 'Cambiar el tipo no convierte las series ya registradas.',
   noExercisesTitle: 'Sin ejercicios',

@@ -93,6 +93,15 @@ export function Row({
   )
 }
 
+/** Interruptor tipo iOS. */
+export function Toggle({ checked, onChange, label }: { checked: boolean; onChange: (checked: boolean) => void; label: string }) {
+  return (
+    <button type="button" role="switch" className="switch" aria-checked={checked} aria-label={label} onClick={() => onChange(!checked)}>
+      <span />
+    </button>
+  )
+}
+
 export function Segmented<T extends string>({ value, options, onChange, label }: {
   value: T; options: { value: T; label: string }[]; onChange: (value: T) => void; label: string
 }) {

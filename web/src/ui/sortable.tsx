@@ -19,6 +19,16 @@ export function dropIndex(slots: { top: number; height: number }[], from: number
   return slots.filter((slot, i) => i !== from && slot.top + slot.height / 2 < center).length
 }
 
+/**
+ * Desplazamiento permitido al arrastrar `from`: su centro puede llegar hasta el borde de arriba
+ * y el de abajo de la lista, para que un elemento más alto que el primero (o el último) pueda pasarlo.
+ */
+export function clampDrag(slots: { top: number; height: number }[], from: number, dy: number): number {
+  const center = slots[from].top + slots[from].height / 2
+  const last = slots[slots.length - 1]
+  return Math.max(slots[0].top - center, Math.min(last.top + last.height - center, dy))
+}
+
 interface Drag {
   from: number
   to: number
@@ -58,10 +68,8 @@ export function SortableList<T>({ items, onMove, renderItem, itemClassName, item
     let frame = 0
 
     const update = () => {
-      // Sin salir de la lista: la lista recorta lo que sobresale.
-      const last = slots[slots.length - 1]
-      const dy = Math.max(slots[0].top - slots[index].top, Math.min(last.top + last.height - slots[index].top - slots[index].height,
-        y - startY + (scroller?.scrollTop ?? 0) - startScroll))
+      // Sin que el centro salga de la lista: la lista recorta lo que sobresale.
+      const dy = clampDrag(slots, index, y - startY + (scroller?.scrollTop ?? 0) - startScroll)
       current = { ...current, dy, to: dropIndex(slots, index, dy) }
       setDrag(current)
     }

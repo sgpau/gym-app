@@ -198,6 +198,8 @@ export const ca: Record<keyof typeof es, Entry> = {
   measuredBy: 'Es mesura per',
   exerciseNotesPlaceholder: 'Tècnica, ajustos de la màquina…',
   footerReps: 'A cada sèrie anotaràs repeticions i pes.',
+  dropset: 'Dropset',
+  dropsetFooter: 'A l’entrenament podràs afegir baixades a cada sèrie: sense descans, menys pes i més repeticions.',
   footerTime: 'A cada sèrie anotaràs la durada, amb cronòmetre, i un pes opcional (llast, disc…).',
   footerTypeChange: 'Canviar el tipus no converteix les sèries ja registrades.',
   noExercisesTitle: 'Sense exercicis',

@@ -265,10 +265,10 @@ function EntrySection({ entry, exercise, workout, workouts, handle, onChange, on
             />
           )}
         />
-        <Row className="action" leading={<PlusIcon width={18} height={18} />} title={t('addSet')} onClick={() => onChange({ ...entry, sets: [...entry.sets, nextSet(entry)] })} />
-        {exercise.trackingType === 'reps' && entry.sets.length > 0 && (
+        {exercise.dropset && exercise.trackingType === 'reps' && entry.sets.length > 0 && (
           <Row className="action" leading={<ArrowDown width={18} height={18} />} title={t('addDrop')} onClick={() => onChange(addDrop(entry))} />
         )}
+        <Row className="action" leading={<PlusIcon width={18} height={18} />} title={t('addSet')} onClick={() => onChange({ ...entry, sets: [...entry.sets, nextSet(entry)] })} />
       </div>
     </section>
   )

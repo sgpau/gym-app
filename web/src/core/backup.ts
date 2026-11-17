@@ -15,6 +15,7 @@ export interface BackupExercise {
   name: string
   muscleGroup?: string
   trackingType?: TrackingType
+  dropset?: boolean
 }
 
 export interface BackupRoutine {

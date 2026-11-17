@@ -164,6 +164,20 @@ describe('base de datos', () => {
     expect(imported.entries[0].sets[1].drops).toEqual([{ reps: 6, weight: 45 }, { reps: null, weight: 30 }])
   })
 
+  it('la marca de dropset del ejercicio se exporta e importa', async () => {
+    await seedIfEmpty(db, 'es')
+    const press = (await db.exercises.toArray()).find((e) => e.name === 'Press de banca')!
+    await db.exercises.put({ ...press, dropset: true })
+    const backup = parseBackup(serializeBackup(await exportBackup(db)))
+    expect(backup.exercises.find((e) => e.name === 'Press de banca')!.dropset).toBe(true)
+    expect(backup.exercises.find((e) => e.name === 'Remo neutro')).not.toHaveProperty('dropset')
+    const other = new GymDatabase(`test-${counter++}`)
+    await importBackup(other, backup, 'es')
+    const imported = await other.exercises.toArray()
+    expect(imported.find((e) => e.name === 'Press de banca')!.dropset).toBe(true)
+    expect(imported.find((e) => e.name === 'Remo neutro')!.dropset).toBeUndefined()
+  })
+
   it('las bajadas vacías no cuentan y una serie nueva copia las bajadas sin las reps', () => {
     const set = { reps: 8, duration: null, weight: 60, drops: [{ reps: 6, weight: 45 }, { reps: null, weight: 30 }] }
     expect(setRecord(set, 'reps')).toEqual({ kind: 'reps', reps: 8, weight: 60, drops: [{ reps: 6, weight: 45 }] })

@@ -5,7 +5,7 @@ import type { Key } from '../i18n'
 import { db, useApp, useData } from '../state'
 import { useDialogs } from '../ui/dialogs'
 import { CheckCircle, Circle, DumbbellIcon, PlusIcon, SearchIcon, TimerIcon } from '../ui/icons'
-import { BarButton, Empty, Row, Screen, Section, Segmented } from '../ui/kit'
+import { BarButton, Empty, Row, Screen, Section, Segmented, Toggle } from '../ui/kit'
 import { useSheet } from '../ui/nav'
 
 export const muscleKey = (g: MuscleGroup) => `mg_${g}` as Key
@@ -109,6 +109,7 @@ export function ExerciseEditor({ exercise, initialName, onSaved }: {
   const [group, setGroup] = useState<MuscleGroup>(exercise?.muscleGroup ?? 'chest')
   const [type, setType] = useState<TrackingType>(exercise?.trackingType ?? 'reps')
   const [notes, setNotes] = useState(exercise?.notes ?? '')
+  const [dropset, setDropset] = useState(exercise?.dropset ?? false)
   const hasHistory = !!exercise && workouts.some((w) => w.entries.some((e) => e.exerciseId === exercise.id))
 
   const save = async () => {
@@ -119,6 +120,7 @@ export function ExerciseEditor({ exercise, initialName, onSaved }: {
       name: trimmed,
       muscleGroup: group,
       trackingType: type,
+      ...(type === 'reps' && dropset ? { dropset: true } : {}),
       notes,
       createdAt: exercise?.createdAt ?? Date.now(),
     }
@@ -153,6 +155,11 @@ export function ExerciseEditor({ exercise, initialName, onSaved }: {
       >
         <Segmented label={t('measuredBy')} value={type} onChange={setType} options={[{ value: 'reps', label: t('trackingReps') }, { value: 'time', label: t('trackingTime') }]} />
       </Section>
+      {type === 'reps' && (
+        <Section footer={t('dropsetFooter')}>
+          <Row title={t('dropset')} trailing={<Toggle label={t('dropset')} checked={dropset} onChange={setDropset} />} />
+        </Section>
+      )}
       <Section header={t('notes')}>
         <Row>
           <textarea rows={3} aria-label={t('notes')} placeholder={t('exerciseNotesPlaceholder')} value={notes} onChange={(e) => setNotes(e.target.value)} />

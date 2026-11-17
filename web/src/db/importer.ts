@@ -31,7 +31,9 @@ export async function importBackup(db: GymDatabase, backup: GymBackup, lang: Lan
       if (existing) return existing
       const meta = info.get(key(rawName))
       const group = MUSCLE_GROUPS.includes(meta?.muscleGroup as MuscleGroup) ? (meta!.muscleGroup as MuscleGroup) : 'other'
-      const created: Exercise = { id: newId(), name, muscleGroup: group, trackingType: meta?.trackingType ?? inferred, notes: '', createdAt: Date.now() }
+      const trackingType = meta?.trackingType ?? inferred
+      const created: Exercise = { id: newId(), name, muscleGroup: group, trackingType, notes: '', createdAt: Date.now() }
+      if (meta?.dropset === true && trackingType === 'reps') created.dropset = true
       exercises.set(key(name), created)
       newExercises.push(created)
       result.exercisesCreated += 1
@@ -102,7 +104,7 @@ export async function exportBackup(db: GymDatabase): Promise<GymBackup> {
   const clean = <T extends object>(o: T) => Object.fromEntries(Object.entries(o).filter(([, v]) => v !== null && v !== undefined && v !== '')) as T
   return {
     version: 1,
-    exercises: exercises.map((e) => ({ name: e.name, muscleGroup: e.muscleGroup, trackingType: e.trackingType })),
+    exercises: exercises.map((e) => ({ name: e.name, muscleGroup: e.muscleGroup, trackingType: e.trackingType, ...(e.dropset ? { dropset: true } : {}) })),
     routines: routines.map((r) => ({
       name: r.name,
       items: r.items.flatMap((item) => {

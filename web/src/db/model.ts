@@ -9,6 +9,8 @@ export interface Exercise {
   name: string
   muscleGroup: MuscleGroup
   trackingType: TrackingType
+  /** Se hace en dropset: en el entreno se pueden añadir bajadas a sus series. Solo por reps. */
+  dropset?: boolean
   notes: string
   createdAt: number
 }

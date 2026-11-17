@@ -71,6 +71,22 @@ async function run(name, { colorScheme = 'light', locale = 'es-ES' } = {}) {
   await page.waitForTimeout(600)
   await shot('04-calendar-data')
 
+  // Marcar Press de banca como dropset en su ficha
+  await page.locator('.tab').nth(3).click()
+  await page.waitForTimeout(400)
+  await page.locator('button.row:visible', { hasText: 'Press de banca' }).first().click()
+  await page.locator('.action-sheet button', { hasText: /Editar|Edita/ }).click()
+  await page.waitForTimeout(500)
+  const dropsetSwitch = page.locator('.sheet .switch:visible')
+  if ((await dropsetSwitch.getAttribute('aria-checked')) !== 'false') errors.push(`${name}: el ejercicio ya sale como dropset`)
+  await dropsetSwitch.click()
+  await page.waitForTimeout(250)
+  await shot('04a-exercise-dropset')
+  await page.locator('.sheet .bar-button.bold:visible', { hasText: /Guardar|Desar/ }).click()
+  await page.waitForTimeout(500)
+  await page.locator('.tab').nth(1).click()
+  await page.waitForTimeout(400)
+
   // Registrar un entreno de la rutina Tren superior 1 hoy, subir el peso del press y finalizar
   await tap('.primary-button')
   await page.waitForTimeout(500)
@@ -154,6 +170,10 @@ async function run(name, { colorScheme = 'light', locale = 'es-ES' } = {}) {
   if (await page.locator('.mini-bar').count()) errors.push(`${name}: la barra sigue tras volver al entreno`)
   // Dropset: una bajada en la última serie del primer ejercicio, con el peso vacío para anotarlo
   const firstList = page.locator('.sheet .entry').first()
+  const dropButtons = page.locator('.sheet .entry button.row', { hasText: /Añadir bajada|Afegir baixada/ })
+  if ((await dropButtons.count()) !== 1) errors.push(`${name}: «Añadir bajada» sale en ${await dropButtons.count()} ejercicios (solo debe salir en el dropset)`)
+  const actionTitles = await firstList.locator('button.row.action').allInnerTexts()
+  if (!/bajada|baixada/.test(actionTitles[0] ?? '')) errors.push(`${name}: «Añadir bajada» no está encima de «Añadir serie» (${actionTitles})`)
   await firstList.locator('button.row', { hasText: /Añadir bajada|Afegir baixada/ }).click()
   await page.waitForTimeout(200)
   const dropWeight = firstList.locator('input[aria-label*="bajada"][aria-label$="kg"], input[aria-label*="baixada"][aria-label$="kg"]')
