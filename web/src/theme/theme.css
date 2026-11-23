@@ -254,6 +254,21 @@ button.row { transition: background 100ms; }
 /* Asa para reordenar arrastrando: el gesto no debe desplazar la pantalla. */
 .drag-handle { touch-action: none; color: var(--label-3); cursor: grab; -webkit-user-select: none; user-select: none; }
 .drag-handle:active { opacity: 1; cursor: grabbing; }
+.switch {
+  position: relative; flex: none;
+  width: 51px; height: 31px; border-radius: 16px;
+  background: var(--fill-2);
+  transition: background 200ms var(--ease-out);
+}
+.switch[aria-checked="true"] { background: var(--green); }
+.switch span {
+  position: absolute; top: 2px; left: 2px;
+  width: 27px; height: 27px; border-radius: 50%;
+  background: #fff; box-shadow: 0 3px 8px rgb(0 0 0 / 0.15), 0 1px 1px rgb(0 0 0 / 0.16);
+  transition: transform 200ms var(--ease-out);
+}
+.switch[aria-checked="true"] span { transform: translateX(20px); }
+@media (prefers-reduced-motion: reduce) { .switch, .switch span { transition: none; } }
 .row.lifted { box-shadow: 0 8px 24px rgb(0 0 0 / 0.18); }
 button.row:active { background: var(--fill-2); }
 .row-main { flex: 1; min-width: 0; }

@@ -15,6 +15,7 @@ export interface BackupExercise {
   name: string
   muscleGroup?: string
   trackingType?: TrackingType
+  dropset?: boolean
 }
 
 export interface BackupRoutine {
@@ -33,6 +34,8 @@ export interface BackupSet {
   reps?: number
   duration?: number
   weight?: number
+  /** Bajadas de un dropset. */
+  drops?: { reps?: number; weight?: number }[]
 }
 
 export class BackupError extends Error {}

@@ -2,16 +2,16 @@ import { useEffect, useRef, useState, type ReactNode } from 'react'
 import type { Delta, ExerciseComparison } from '../core/comparison'
 import { formatDuration, formatMetricValue, formatSet, formatWeight, formatWorkoutText } from '../core/format'
 import type { ProgressMetric } from '../core/stats'
-import { makeEntry, makeWorkout, nextSet } from '../db/factory'
+import { addDrop, makeEntry, makeWorkout, nextSet } from '../db/factory'
 import { lastLog, workoutComparison, workoutLogs, workoutSummary } from '../db/history'
-import type { Exercise, Routine, Workout, WorkoutEntry, WorkoutSet } from '../db/model'
+import type { Exercise, Routine, Workout, WorkoutDrop, WorkoutEntry, WorkoutSet } from '../db/model'
 import type { Key } from '../i18n'
 import { db, useApp, useData } from '../state'
 import { PairedBars } from '../ui/charts'
 import { dayTitle, longDay, shortDay, toLocalInput } from '../ui/dates'
 import { DeltaBadge } from '../ui/DeltaBadge'
 import { useDialogs } from '../ui/dialogs'
-import { BoltIcon, ChevronDown, ChevronUp, EllipsisIcon, ListIcon, PlayIcon, PlusIcon, StopIcon, TrashIcon, TrophyIcon } from '../ui/icons'
+import { ArrowDown, BoltIcon, ChevronDown, ChevronUp, EllipsisIcon, ListIcon, PlayIcon, PlusIcon, StopIcon, TrashIcon, TrophyIcon } from '../ui/icons'
 import { BarButton, Empty, NumberField, Row, Screen, Section } from '../ui/kit'
 import { useNav, useSheet } from '../ui/nav'
 import { forgetOpenWorkout, rememberOpenWorkout } from '../ui/openWorkout'
@@ -251,7 +251,7 @@ function EntrySection({ entry, exercise, workout, workouts, handle, onChange, on
           items={entry.sets}
           onMove={(from, to) => onChange({ ...entry, sets: moveItem(entry.sets, from, to) })}
           itemClassName="row"
-          itemStyle={{ gap: 8, paddingLeft: 4, paddingRight: 8 }}
+          itemStyle={{ gap: 8, paddingLeft: 4, paddingRight: 8, flexWrap: 'wrap' }}
           handleLabel={t('reorder')}
           renderItem={(set, index, setHandle) => (
             <SetRow
@@ -265,6 +265,9 @@ function EntrySection({ entry, exercise, workout, workouts, handle, onChange, on
             />
           )}
         />
+        {exercise.dropset && exercise.trackingType === 'reps' && entry.sets.length > 0 && (
+          <Row className="action" leading={<ArrowDown width={18} height={18} />} title={t('addDrop')} onClick={() => onChange(addDrop(entry))} />
+        )}
         <Row className="action" leading={<PlusIcon width={18} height={18} />} title={t('addSet')} onClick={() => onChange({ ...entry, sets: [...entry.sets, nextSet(entry)] })} />
       </div>
     </section>
@@ -297,7 +300,43 @@ function SetRow({ number, set, handle, repsHint, timed, onChange, onDelete }: {
       <button className="bar-button" style={{ minWidth: 32, padding: 0, color: 'var(--label-3)' }} aria-label={t('deleteSet')} onClick={onDelete}>
         <TrashIcon width={18} height={18} />
       </button>
+      {!timed && set.drops?.map((drop, d) => (
+        <DropRow
+          key={d}
+          label={t('dropNumber', { n: number, d: d + 1 })}
+          drop={drop}
+          onChange={(value) => onChange({ ...set, drops: set.drops!.map((x, i) => (i === d ? value : x)) })}
+          onDelete={() => {
+            const drops = set.drops!.filter((_, i) => i !== d)
+            const { drops: _, ...rest } = set
+            onChange(drops.length ? { ...set, drops } : rest)
+          }}
+        />
+      ))}
     </>
+  )
+}
+
+/** Bajada de un dropset, debajo de su serie y alineada con ella (sin asa: se mueve con la serie). */
+function DropRow({ label, drop, onChange, onDelete }: { label: string; drop: WorkoutDrop; onChange: (d: WorkoutDrop) => void; onDelete: () => void }) {
+  const { t } = useApp()
+  return (
+    <div style={{ flexBasis: '100%', display: 'flex', alignItems: 'center', gap: 8 }}>
+      <span style={{ width: 44 }} />
+      <span className="tertiary" style={{ width: 18, fontWeight: 600 }} aria-hidden>↳</span>
+      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+        <NumberField label={`${label}, ${t('repsUnit')}`} placeholder="0" value={drop.reps} onChange={(reps) => onChange({ ...drop, reps })} width={56} />
+        <span className="unit">{t('repsUnit')}</span>
+      </span>
+      <span style={{ flex: 1 }} />
+      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+        <NumberField decimal label={`${label}, kg`} value={drop.weight} onChange={(weight) => onChange({ ...drop, weight })} width={64} />
+        <span className="unit">kg</span>
+      </span>
+      <button className="bar-button" style={{ minWidth: 32, padding: 0, color: 'var(--label-3)' }} aria-label={`${t('deleteDrop')} (${label})`} onClick={onDelete}>
+        <TrashIcon width={18} height={18} />
+      </button>
+    </div>
   )
 }
 

@@ -38,8 +38,21 @@ export function makeWorkout(routine: Routine | null, day: Date, workouts: Workou
   return workout
 }
 
-/** Una serie nueva copia la anterior, que suele ser lo que se repite. */
+/**
+ * Una serie nueva copia la anterior, que suele ser lo que se repite. Si era un dropset,
+ * copia también sus bajadas con el mismo peso y las reps por anotar.
+ */
 export const nextSet = (entry: WorkoutEntry): WorkoutSet => {
   const previous = entry.sets.at(-1)
-  return { reps: previous?.reps ?? null, duration: previous?.duration ?? null, weight: previous?.weight ?? null }
+  const set: WorkoutSet = { reps: previous?.reps ?? null, duration: previous?.duration ?? null, weight: previous?.weight ?? null }
+  if (previous?.drops?.length) set.drops = previous.drops.map((d) => ({ reps: null, weight: d.weight }))
+  return set
+}
+
+/** Añade una bajada vacía a la última serie (la que se acaba de hacer). */
+export function addDrop(entry: WorkoutEntry): WorkoutEntry {
+  const last = entry.sets.at(-1)
+  if (!last) return entry
+  const drops = [...(last.drops ?? []), { reps: null, weight: null }]
+  return { ...entry, sets: [...entry.sets.slice(0, -1), { ...last, drops }] }
 }

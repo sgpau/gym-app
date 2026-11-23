@@ -2,17 +2,31 @@
 
 export type TrackingType = 'reps' | 'time'
 
-/** Una serie realizada. El peso está en kg; 0 = peso corporal. */
+/** Bajada de un dropset ya hecha. */
+export interface DropRecord {
+  reps: number
+  weight: number
+}
+
+/**
+ * Una serie realizada. El peso está en kg; 0 = peso corporal.
+ * `drops` (solo por reps) son las bajadas de un dropset: suman volumen y reps, pero no cuentan
+ * para el peso máximo, el 1RM ni la mejor serie, que salen de la serie principal.
+ */
 export type SetRecord =
-  | { kind: 'reps'; reps: number; weight: number }
+  | { kind: 'reps'; reps: number; weight: number; drops?: DropRecord[] }
   | { kind: 'time'; duration: number; weight: number }
 
-export const repsSet = (reps: number, weight = 0): SetRecord => ({ kind: 'reps', reps, weight })
+export const repsSet = (reps: number, weight = 0, drops?: DropRecord[]): SetRecord =>
+  drops?.length ? { kind: 'reps', reps, weight, drops } : { kind: 'reps', reps, weight }
 export const timeSet = (duration: number, weight = 0): SetRecord => ({ kind: 'time', duration, weight })
 
-/** Kilos movidos (reps × peso). Las series por tiempo no suman volumen. */
+/** Bajadas de la serie (ninguna si no es un dropset). */
+export const dropsOf = (set: SetRecord): DropRecord[] => (set.kind === 'reps' ? set.drops ?? [] : [])
+
+/** Kilos movidos (reps × peso), bajadas incluidas. Las series por tiempo no suman volumen. */
 export function volumeOf(set: SetRecord): number {
-  return set.kind === 'reps' ? set.reps * set.weight : 0
+  return set.kind === 'reps' ? set.reps * set.weight + dropsOf(set).reduce((a, d) => a + d.reps * d.weight, 0) : 0
 }
 
 /** 1RM estimado con la fórmula de Epley; null sin peso o sin reps. */
@@ -52,11 +66,12 @@ export interface SessionSummary {
 
 export function summarize(sets: SetRecord[]): SessionSummary {
   const reps = sets.flatMap((s) => (s.kind === 'reps' ? [s.reps] : []))
+  const dropReps = sets.flatMap(dropsOf).reduce((a, d) => a + d.reps, 0)
   const durations = sets.flatMap((s) => (s.kind === 'time' ? [s.duration] : []))
   const orms = sets.map(oneRepMaxOf).filter((v): v is number => v !== null)
   return {
     setCount: sets.length,
-    totalReps: reps.reduce((a, b) => a + b, 0),
+    totalReps: reps.reduce((a, b) => a + b, dropReps),
     maxReps: Math.max(0, ...reps),
     maxWeight: Math.max(0, ...sets.map((s) => s.weight)),
     bestOneRepMax: orms.length ? Math.max(...orms) : null,

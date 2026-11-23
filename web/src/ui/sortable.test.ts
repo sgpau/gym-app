@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { dropIndex, moveItem } from './sortable'
+import { clampDrag, dropIndex, moveItem } from './sortable'
 
 describe('reordenar arrastrando', () => {
   it('mueve un elemento hacia abajo y hacia arriba', () => {
@@ -14,6 +14,14 @@ describe('reordenar arrastrando', () => {
   it('sin pasar del centro del vecino, se queda en su sitio', () => {
     expect(dropIndex(slots, 0, 0)).toBe(0)
     expect(dropIndex(slots, 0, 60)).toBe(0) // centro en 110 < 120 (centro del 2º)
+  })
+  it('un elemento más alto que el primero puede llegar arriba del todo', () => {
+    // El 2.º (100 de alto, centro en 90) bajo un 1.º de 40: su centro puede subir hasta 0.
+    const tall = [{ top: 0, height: 40 }, { top: 40, height: 100 }]
+    expect(clampDrag(tall, 1, -1000)).toBe(-90)
+    expect(dropIndex(tall, 1, clampDrag(tall, 1, -1000))).toBe(0)
+    expect(clampDrag(tall, 0, 1000)).toBe(120)
+    expect(dropIndex(tall, 0, clampDrag(tall, 0, 1000))).toBe(1)
   })
   it('al pasar el centro de otros, ocupa su posición', () => {
     expect(dropIndex(slots, 0, 80)).toBe(1)

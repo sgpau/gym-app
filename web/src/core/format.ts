@@ -1,7 +1,7 @@
 // Textos de pesos, tiempos y series (port de GymApp/Core/Formatters.swift).
 import type { I18n } from '../i18n'
 import { deltaChange, type Delta } from './comparison'
-import type { ExerciseLog, ProgressMetric, SetRecord } from './stats'
+import { dropsOf, type ExerciseLog, type ProgressMetric, type SetRecord } from './stats'
 
 export function formatNumber(value: number, i: I18n, fractionDigits = 2): string {
   return new Intl.NumberFormat(i.locale, { maximumFractionDigits: fractionDigits }).format(value)
@@ -20,18 +20,19 @@ export function formatDuration(seconds: number): string {
   return h > 0 ? `${h}:${pad(m)}:${pad(s)}` : `${m}:${pad(s)}`
 }
 
-/** Una serie: "62,5 kg × 8", "12 reps", "1:00" o "0:45 · 10 kg". */
+/** Una serie: "62,5 kg × 8", "12 reps", "1:00", "0:45 · 10 kg" o, en un dropset, "60 kg × 8 → 45 kg × 6". */
 export function formatSet(set: SetRecord, i: I18n): string {
   if (set.kind === 'reps') {
-    return set.weight > 0 ? `${formatWeight(set.weight, i)} × ${set.reps}` : i.t('repsCount', { n: set.reps })
+    const part = (reps: number, weight: number) => (weight > 0 ? `${formatWeight(weight, i)} × ${reps}` : i.t('repsCount', { n: reps }))
+    return [part(set.reps, set.weight), ...dropsOf(set).map((d) => part(d.reps, d.weight))].join(' → ')
   }
   return set.weight > 0 ? `${formatDuration(set.duration)} · ${formatWeight(set.weight, i)}` : formatDuration(set.duration)
 }
 
-/** "3×8 · 60 kg", "8, 8, 6 · 60 kg" o "3×1:00". */
+/** "3×8 · 60 kg", "8, 8, 6 · 60 kg", "8, 8, 8+6+5 · 60 kg" (dropset) o "3×1:00". */
 export function formatSetSummary(sets: SetRecord[], i: I18n): string {
   if (!sets.length) return i.t('noSets')
-  const values = sets.map((s) => (s.kind === 'reps' ? String(s.reps) : formatDuration(s.duration)))
+  const values = sets.map((s) => (s.kind === 'reps' ? [s.reps, ...dropsOf(s).map((d) => d.reps)].join('+') : formatDuration(s.duration)))
   const counts = new Set(values).size === 1 ? `${sets.length}×${values[0]}` : values.join(', ')
   const maxWeight = Math.max(0, ...sets.map((s) => s.weight))
   return maxWeight > 0 ? `${counts} · ${formatWeight(maxWeight, i)}` : counts

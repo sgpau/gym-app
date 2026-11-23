@@ -1,6 +1,6 @@
 // Puente entre los datos guardados y la lógica pura de core/ (equivalente a GymApp/Models/History.swift).
 import { compareWorkout, type WorkoutComparison } from '../core/comparison'
-import { personalBests, summarize, type ExerciseLog, type PersonalBests, type SessionSummary, type SetRecord, type TrackingType } from '../core/stats'
+import { personalBests, repsSet, summarize, type ExerciseLog, type PersonalBests, type SessionSummary, type SetRecord, type TrackingType } from '../core/stats'
 import type { Exercise, Workout, WorkoutEntry, WorkoutSet } from './model'
 
 export type ExerciseMap = Map<string, Exercise>
@@ -8,7 +8,9 @@ export type ExerciseMap = Map<string, Exercise>
 /** La serie como dato puro, o null si aún está vacía. */
 export function setRecord(set: WorkoutSet, type: TrackingType): SetRecord | null {
   if (type === 'reps') {
-    return set.reps && set.reps > 0 ? { kind: 'reps', reps: set.reps, weight: set.weight ?? 0 } : null
+    if (!set.reps || set.reps <= 0) return null
+    const drops = (set.drops ?? []).flatMap((d) => (d.reps && d.reps > 0 ? [{ reps: d.reps, weight: d.weight ?? 0 }] : []))
+    return repsSet(set.reps, set.weight ?? 0, drops)
   }
   return set.duration && set.duration > 0 ? { kind: 'time', duration: set.duration, weight: set.weight ?? 0 } : null
 }
